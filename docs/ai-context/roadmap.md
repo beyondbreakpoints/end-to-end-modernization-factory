@@ -8,17 +8,21 @@ Ingest each source faithfully into raw Delta tables in `bronze`, attach file/bat
 
 **Gate:** all five loaders and the orchestration notebook complete; expected source-file/row checks pass; all tables retain ingestion metadata.
 
-## 2. Silver — implemented, Fabric validation pending
+## 2. Silver — implemented and successfully executed in Fabric
 
 Create typed, standardized Delta tables in `silver`. Handle each source's date, money, identifier, and unit conventions. Retain flags and source evidence for anomalies rather than silently dropping rows. Establish explicit POS/app matching so completed online orders are linked to, not added on top of, till sales.
 
 **Gate:** transformations run in Fabric; keys and business-date rules are validated; anomaly and matching counts are explainable; source lineage survives.
 
-**Current status:** implementation is now checked into `NG/Dev` as five source notebooks plus `nb_silver_run_all`. The gate still requires syncing and running these notebooks in Fabric; see [`backlog.md`](backlog.md).
+**Current status:** on 2026-11-11, the user confirmed Fabric execution completed with all Silver notebooks marked `Succeeded` after the menu-mapping fixes. This confirms the execution gate and embedded assertions passed for that run; the workspace was not independently inspected in this session.
 
-## 3. Gold — legacy reproduction, then corrected results
+**Carry-forward notes:** the matching assertions require 1,637 unique MICROS links, 630 unique Aloha links, and one retained ambiguous Aloha match. The ambiguity remains an explicit Gold/reconciliation task, not a notebook failure. Archive the successful run's count/quality output and run identifier for the dossier; these were not included in the user's status report.
+
+## 3. Gold — next: legacy reproduction, then corrected results
 
 First reproduce SliceDW's existing business rules and numbers as closely as possible from the legacy SQL and SSIS artifacts. Only after establishing that baseline, implement corrected marts and identify each rule that changes a result.
+
+**Next action:** inspect `data/2_legacy_warehouse_slicedw/sql/02_programmability.sql` and associated SQL/SSIS artifacts, document the rule dependencies, and agree the Gold plan before implementing. Gold work has not started.
 
 **Gate:** legacy reproduction is compared to SliceDW; corrected outputs document their differences and reconcile to Silver/source totals.
 
