@@ -22,7 +22,7 @@
 # MARKDOWN ********************
 
 # # Bronze: run all
-# Runs the five Bronze notebooks with a shared batch id, then prints row counts for every `bronze` table. Upload the files to `Files/polar_slice/` first (see `docs/onelake-upload.md`).
+# Runs the five Bronze notebooks with a shared batch id, then prints row counts for every `bronze` table. Upload the files to `Files/` first (see `docs/onelake-upload.md`).
 
 # CELL ********************
 
