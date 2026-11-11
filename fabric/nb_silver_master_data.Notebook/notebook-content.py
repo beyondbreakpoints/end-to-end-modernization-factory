@@ -76,9 +76,9 @@ menu = menu_raw.select(
     parsed("micros_item_no", "INT").alias("micros_item_no"), *META,
 )
 assert menu.filter(F.col("price_excl_tax").isNull() | F.col("micros_item_no").isNull()).count() == 0
-assert menu.groupBy("sku").count().filter("count > 1").count() == 0
-assert menu.groupBy("micros_item_no").count().filter("count > 1").count() == 0
-assert menu.select("price_excl_tax").distinct().count() == menu.count()
+assert menu.groupBy("sku").count().filter("count > 1").count() == 0, "Duplicate master menu SKUs"
+assert menu.groupBy("micros_item_no").count().filter("count > 1").count() == 0, \
+    "Duplicate master menu MICROS item numbers"
 save(menu, "menu")
 
 calendar_raw = spark.table("bronze.master_calendar")

@@ -27,6 +27,14 @@ The previous conversation mentioned “item 3” and later asked for step-by-ste
 - Silver flags and retains anomalous rows; Gold must explicitly decide business inclusion. `_batch_id` remains Bronze provenance, while `_silver_batch_id` identifies the transformation run.
 - Local Python syntax and Fabric metadata were checked; live Spark/Fabric execution and output assertions remain pending.
 
+## Silver menu-mapping fix
+
+- The initial Fabric master-data run failed because the notebook incorrectly required unique menu prices. The source has 19 SKUs but 17 distinct prices. SKU and MICROS item-number uniqueness remain enforced.
+- Aloha now uses explicit code-to-SKU mappings, checked against source names and tax-inclusive menu prices, rather than a price-only join. Unknown codes and name/price mismatches are flagged with null SKUs, printed as diagnostics, and stop publication. Mapping must preserve the source row count.
+- Local PySpark execution of the master-data and Aloha transformations passed against the source pack, preserving all 7,341 Aloha lines and mapping all 19 item codes. Regression cases also cover unknown codes, name/price mismatches, and comp lines. Delta writes and Fabric orchestration are not exercised by these local tests.
+- Run these regressions with Java 17 and PySpark 3.5 installed: `python -m unittest discover -s tests -p test_silver_menu_mapping.py -v`.
+- Sync the fixes from `NG/Dev` and rerun `nb_silver_run_all` in Fabric. The earlier failed run may have written `silver.stores`; rerunning overwrites the Silver outputs without changing Bronze.
+
 ## Provenance
 
 This context was reconstructed from the user-provided `conversation-summary.md` attachment. The repository did not contain that attachment at the time these notes were added. Treat statements about run status, row counts, branch configuration, and workspace state as reported history; re-check live state before relying on them.

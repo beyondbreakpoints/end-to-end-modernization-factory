@@ -26,6 +26,7 @@ Verified row counts from that run:
 ## Silver — implementation complete, Fabric validation pending
 
 - [ ] Sync the updated `NG/Dev` branch to Fabric and run `nb_silver_run_all` after Bronze.
+- [x] Fix the invalid unique-price assertion and price-only Aloha mapping after the initial master-data run failed; verify row-preserving mappings with local Spark regressions.
 - [ ] Review table counts and assertions, including 49 MICROS gift checks, 14 void reversals, duplicate checks, 131 Aloha post-midnight checks, 34 cancelled app orders, and AS/400 credit/KG handling.
 - [ ] Confirm POS matching results: MICROS order references and Aloha amount/time candidates; preserve any ambiguous matches for explicit resolution.
 - [ ] Capture actual Silver counts and quality results, then update this handoff before starting Gold.

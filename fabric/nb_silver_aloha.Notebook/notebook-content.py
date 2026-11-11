@@ -114,14 +114,53 @@ items = items.withColumn(
     "unit_price_excl_tax_est",
     F.round(F.col("unit_price_tax_incl") / F.lit("1.13").cast("DECIMAL(4,2)"), 2)
         .cast("DECIMAL(12,2)"))
-menu = spark.table("silver.menu").select(
-    F.col("price_excl_tax").alias("_menu_price_excl_tax"), "sku"
-)
+ALOHA_ITEM_MAP = [
+    ("SMPEP", "SM PEP", "PZ-PEP-S"),
+    ("MDPEP", "MD PEP", "PZ-PEP-M"),
+    ("LGPEP", "LG PEP", "PZ-PEP-L"),
+    ("MDMARG", "MD MARG", "PZ-MAR-M"),
+    ("LGMARG", "LG MARG", "PZ-MAR-L"),
+    ("MDHAW", "MD HAW", "PZ-HAW-M"),
+    ("LGHAW", "LG HAW", "PZ-HAW-L"),
+    ("MDVEG", "MD VEG", "PZ-VEG-M"),
+    ("LGVEG", "LG VEG", "PZ-VEG-L"),
+    ("MDMEAT", "MD MEAT", "PZ-MTL-M"),
+    ("LGMEAT", "LG MEAT", "PZ-MTL-L"),
+    ("LGBBQ", "LG BBQ", "PZ-BBQ-L"),
+    ("GARBRD", "GAR BRD", "SD-GARLIC"),
+    ("WING10", "WINGS 10", "SD-WING10"),
+    ("CAESAR", "CAESAR", "SD-CAESAR"),
+    ("DIPGAR", "DIP GAR", "SD-DIP"),
+    ("CINN", "CINN BTE", "DS-CINN"),
+    ("POP2L", "POP 2L", "BV-POP2L"),
+    ("POPCAN", "POP CAN", "BV-POPCAN"),
+]
+item_map = spark.createDataFrame(
+    ALOHA_ITEM_MAP, "_aloha_code STRING, _aloha_name STRING, sku STRING")
+assert item_map.groupBy("_aloha_code").count().filter("count > 1").count() == 0, \
+    "Duplicate Aloha item mapping codes"
+menu = spark.table("silver.menu").select("sku", "price_excl_tax")
+assert menu.groupBy("sku").count().filter("count > 1").count() == 0, "Duplicate Silver menu SKUs"
+item_map = item_map.join(menu, "sku", "left")
+assert item_map.filter(F.col("price_excl_tax").isNull()).count() == 0, \
+    "Aloha item mapping references missing or invalid menu SKUs"
+item_map = item_map.withColumn(
+    "_expected_price_tax_incl",
+    F.round(F.col("price_excl_tax") * F.lit("1.13").cast("DECIMAL(4,2)"), 2))
 items = (items.join(
-        F.broadcast(menu),
-        (F.col("TYPE") == "ITEM") & (F.col("unit_price_excl_tax_est") == F.col("_menu_price_excl_tax")),
+        F.broadcast(item_map),
+        (F.col("TYPE") == "ITEM") & (F.upper(F.trim("ITEMCODE")) == F.col("_aloha_code")),
         "left")
-    .drop("_menu_price_excl_tax")
+    .withColumn("is_item_name_mismatch",
+        F.coalesce((F.col("TYPE") == "ITEM") & F.col("_aloha_code").isNotNull()
+                   & ~F.upper(F.trim("ITEMNAME")).eqNullSafe(F.col("_aloha_name")), F.lit(False)))
+    .withColumn("is_item_price_mismatch",
+        F.coalesce((F.col("TYPE") == "ITEM") & F.col("_aloha_code").isNotNull()
+                   & ~F.col("unit_price_tax_incl").eqNullSafe(F.col("_expected_price_tax_incl")),
+                   F.lit(False)))
+    .withColumn("sku", F.when(
+        ~F.col("is_item_name_mismatch") & ~F.col("is_item_price_mismatch"), F.col("sku")))
+    .drop("_aloha_code", "_aloha_name", "price_excl_tax", "_expected_price_tax_incl")
     .withColumn("is_comp", F.col("TYPE") == "COMP")
     .withColumn("is_item_unmapped", (F.col("TYPE") == "ITEM") & F.col("sku").isNull())
     .withColumn("is_duplicate_line", F.count(F.lit(1)).over(Window.partitionBy(
@@ -132,8 +171,14 @@ assert items.filter(
     | F.col("unit_price_tax_incl").isNull() | F.col("amount_tax_incl").isNull()
     | F.col("order_ts").isNull()
 ).count() == 0
-assert items.filter("is_item_unmapped").count() == 0
-assert items.count() == 7341
+unmapped_count = items.filter("is_item_unmapped").count()
+if unmapped_count:
+    items.filter("is_item_unmapped").select(
+        "ITEMCODE", "ITEMNAME", "unit_price_tax_incl",
+        "is_item_name_mismatch", "is_item_price_mismatch").distinct().show(truncate=False)
+assert unmapped_count == 0, f"{unmapped_count} Aloha item lines have unresolved menu mappings"
+assert items.count() == items_raw.count(), "Aloha item mapping changed the source row count"
+assert items.count() == 7341, "Unexpected Aloha item line count for the source pack"
 save(items, "aloha_check_lines")
 
 # METADATA ********************
