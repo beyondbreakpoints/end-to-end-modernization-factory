@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts" DTS:refId="Package" DTS:ExecutableType="Microsoft.Package" DTS:ObjectName="LoadCommissary" DTS:CreationDate="06/22/2017 08:05:51" DTS:CreatorName="POLARSLICE\etl_svc" DTS:CreatorComputerName="PSETL01" DTS:VersionBuild="42">
+ <DTS:ConnectionManagers>
+  <DTS:ConnectionManager DTS:ObjectName="OLEDB_SliceDW" DTS:CreationName="OLEDB" DTS:DTSID="{6F1D2A10-0B6B-4C2E-9D11-5A1D0C0A0001}"><DTS:ObjectData><DTS:ConnectionManager DTS:ConnectionString="Data Source=PSSQL01;Initial Catalog=SliceDW;Provider=SQLNCLI11.1;Integrated Security=SSPI;" /></DTS:ObjectData></DTS:ConnectionManager>
+  <DTS:ConnectionManager DTS:ObjectName="FF_ItemMast" DTS:CreationName="FLATFILE"><DTS:ObjectData><DTS:ConnectionManager DTS:ConnectionString="\\as400ifs\exports\ITEMMAST.TXT" DTS:Format="FixedWidth" DTS:ColumnNamesInFirstDataRow="False" /></DTS:ObjectData></DTS:ConnectionManager>
+  <DTS:ConnectionManager DTS:ObjectName="FF_Shipments" DTS:CreationName="FLATFILE"><DTS:ObjectData><DTS:ConnectionManager DTS:ConnectionString="\\as400ifs\exports\SHP*.TXT" DTS:Format="FixedWidth" DTS:ColumnNamesInFirstDataRow="False" /></DTS:ObjectData></DTS:ConnectionManager>
+  <DTS:ConnectionManager DTS:ObjectName="FF_Counts" DTS:CreationName="FLATFILE"><DTS:ObjectData><DTS:ConnectionManager DTS:ConnectionString="\\as400ifs\exports\CNT*.TXT" DTS:Format="FixedWidth" DTS:ColumnNamesInFirstDataRow="False" /></DTS:ObjectData></DTS:ConnectionManager>
+ </DTS:ConnectionManagers>
+ <DTS:Executables>
+  <DTS:Executable DTS:refId="Package\DFT Item master" DTS:ExecutableType="Microsoft.Pipeline" DTS:ObjectName="DFT Item master">
+   <DTS:ObjectData><pipeline version="1"><components>
+    <component name="SRC FF_ItemMast" componentClassID="Microsoft.FlatFileSource"><connections><connection connectionManagerRefId="Package.ConnectionManagers[FF_ItemMast]" /></connections></component>
+    <component name="DST [stg].[as400_itemmast_raw]" componentClassID="Microsoft.OLEDBDestination"><properties><property name="OpenRowset">[stg].[as400_itemmast_raw]</property><property name="AccessMode">3</property></properties><connections><connection connectionManagerRefId="Package.ConnectionManagers[OLEDB_SliceDW]" /></connections></component>
+   </components></pipeline></DTS:ObjectData>
+  </DTS:Executable>
+  <DTS:Executable DTS:refId="Package\DFT Shipments" DTS:ExecutableType="Microsoft.Pipeline" DTS:ObjectName="DFT Shipments">
+   <DTS:ObjectData><pipeline version="1"><components>
+    <component name="SRC FF_Shipments" componentClassID="Microsoft.FlatFileSource"><connections><connection connectionManagerRefId="Package.ConnectionManagers[FF_Shipments]" /></connections></component>
+    <component name="DER file name and line" componentClassID="Microsoft.DerivedColumn"><properties><property name="Expression">@[User::FileName]; @[User::LineNo]</property></properties></component>
+    <component name="DST [stg].[as400_shipment_raw]" componentClassID="Microsoft.OLEDBDestination"><properties><property name="OpenRowset">[stg].[as400_shipment_raw]</property><property name="AccessMode">3</property></properties><connections><connection connectionManagerRefId="Package.ConnectionManagers[OLEDB_SliceDW]" /></connections></component>
+   </components></pipeline></DTS:ObjectData>
+  </DTS:Executable>
+  <DTS:Executable DTS:refId="Package\DFT Counts" DTS:ExecutableType="Microsoft.Pipeline" DTS:ObjectName="DFT Counts">
+   <DTS:ObjectData><pipeline version="1"><components>
+    <component name="SRC FF_Counts" componentClassID="Microsoft.FlatFileSource"><connections><connection connectionManagerRefId="Package.ConnectionManagers[FF_Counts]" /></connections></component>
+    <component name="DER file name and line" componentClassID="Microsoft.DerivedColumn"><properties><property name="Expression">@[User::FileName]; @[User::LineNo]</property></properties></component>
+    <component name="DST [stg].[as400_count_raw]" componentClassID="Microsoft.OLEDBDestination"><properties><property name="OpenRowset">[stg].[as400_count_raw]</property><property name="AccessMode">3</property></properties><connections><connection connectionManagerRefId="Package.ConnectionManagers[OLEDB_SliceDW]" /></connections></component>
+   </components></pipeline></DTS:ObjectData>
+  </DTS:Executable>
+ </DTS:Executables>
+ <DTS:PrecedenceConstraints>
+ </DTS:PrecedenceConstraints>
+</DTS:Executable>

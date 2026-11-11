@@ -1,0 +1,242 @@
+[
+ {
+  "order_id": "PS-A-892261",
+  "placed_at": "2026-03-14T00:35:00-04:00",
+  "store_id": 2207,
+  "channel": "app",
+  "fulfilment": "delivery",
+  "status": "completed",
+  "promo_code": null,
+  "customer": {
+   "id": 33782,
+   "name": "Jamal Hughes",
+   "email": "jamal.hughes@example.com",
+   "phone": "226-555-0155"
+  },
+  "items": [
+   {
+    "sku": "PZ-MTL-M",
+    "name": "Medium Meat Lovers 12in",
+    "qty": 1,
+    "unit_price": 13.99
+   },
+   {
+    "sku": "PZ-PEP-L",
+    "name": "Large Pepperoni 14in",
+    "qty": 1,
+    "unit_price": 13.99
+   },
+   {
+    "sku": "SD-DIP",
+    "name": "Garlic Dip",
+    "qty": 1,
+    "unit_price": 0.99
+   }
+  ],
+  "subtotal": 28.97,
+  "discount": 0.0,
+  "tax": 3.77,
+  "tip": 0.0,
+  "total": 32.74,
+  "pos_check_no": null
+ },
+ {
+  "order_id": "PS-A-892262",
+  "placed_at": "2026-03-14T01:00:29-04:00",
+  "store_id": 2214,
+  "channel": "app",
+  "fulfilment": "delivery",
+  "status": "completed",
+  "promo_code": null,
+  "customer": {
+   "id": 34297,
+   "name": "Amara Roy",
+   "email": "amara.roy@example.net",
+   "phone": "519-555-0161"
+  },
+  "items": [
+   {
+    "sku": "PZ-HAW-L",
+    "name": "Large Hawaiian 14in",
+    "qty": 1,
+    "unit_price": 14.49
+   },
+   {
+    "sku": "PZ-BBQ-L",
+    "name": "Large BBQ Chicken 14in",
+    "qty": 1,
+    "unit_price": 15.99
+   }
+  ],
+  "subtotal": 30.48,
+  "discount": 0.0,
+  "tax": 3.96,
+  "tip": 0.0,
+  "total": 34.44,
+  "pos_check_no": null
+ },
+ {
+  "order_id": "PS-A-892263",
+  "placed_at": "2026-03-14T01:06:57-04:00",
+  "store_id": 2214,
+  "channel": "app",
+  "fulfilment": "pickup",
+  "status": "completed",
+  "promo_code": null,
+  "customer": {
+   "id": 34523,
+   "name": "Ananya Gill",
+   "email": "agill8@example.org",
+   "phone": "+12265550130"
+  },
+  "items": [
+   {
+    "sku": "PZ-HAW-L",
+    "name": "Large Hawaiian 14in",
+    "qty": 1,
+    "unit_price": 14.49
+   },
+   {
+    "sku": "PZ-MAR-L",
+    "name": "Large Margherita 14in",
+    "qty": 1,
+    "unit_price": 13.49
+   },
+   {
+    "sku": "PZ-PEP-M",
+    "name": "Medium Pepperoni 12in",
+    "qty": 1,
+    "unit_price": 11.99
+   },
+   {
+    "sku": "SD-CAESAR",
+    "name": "Caesar Salad",
+    "qty": 1,
+    "unit_price": 7.49
+   }
+  ],
+  "subtotal": 47.46,
+  "discount": 0.0,
+  "tax": 6.17,
+  "tip": 0.0,
+  "total": 53.63,
+  "pos_check_no": null
+ },
+ {
+  "order_id": "PS-W-892264",
+  "placed_at": "2026-03-14T01:30:16-04:00",
+  "store_id": 2214,
+  "channel": "web",
+  "fulfilment": "delivery",
+  "status": "completed",
+  "promo_code": null,
+  "customer": {
+   "id": 34973,
+   "name": "A. Wong",
+   "email": "awong82@example.org",
+   "phone": "(249) 555-0133"
+  },
+  "items": [
+   {
+    "sku": "PZ-PEP-M",
+    "name": "Medium Pepperoni 12in",
+    "qty": 1,
+    "unit_price": 11.99
+   },
+   {
+    "sku": "PZ-VEG-M",
+    "name": "Medium Veggie 12in",
+    "qty": 1,
+    "unit_price": 12.99
+   }
+  ],
+  "subtotal": 24.98,
+  "discount": 0.0,
+  "tax": 3.25,
+  "tip": 2.0,
+  "total": 30.23,
+  "pos_check_no": null
+ },
+ {
+  "order_id": "PS-A-892265",
+  "placed_at": "2026-03-14T01:43:37-04:00",
+  "store_id": 2207,
+  "channel": "app",
+  "fulfilment": "delivery",
+  "status": "completed",
+  "promo_code": null,
+  "customer": {
+   "id": 32561,
+   "name": "Tyler Osei",
+   "email": "tyler.osei@example.org",
+   "phone": "613-555-0126"
+  },
+  "items": [
+   {
+    "sku": "PZ-PEP-L",
+    "name": "Large Pepperoni 14in",
+    "qty": 1,
+    "unit_price": 13.99
+   },
+   {
+    "sku": "BV-POPCAN",
+    "name": "Pop Can 355ml",
+    "qty": 1,
+    "unit_price": 1.79
+   },
+   {
+    "sku": "BV-POP2L",
+    "name": "Pop 2L",
+    "qty": 1,
+    "unit_price": 3.99
+   },
+   {
+    "sku": "SD-DIP",
+    "name": "Garlic Dip",
+    "qty": 1,
+    "unit_price": 0.99
+   }
+  ],
+  "subtotal": 20.76,
+  "discount": 0.0,
+  "tax": 2.7,
+  "tip": 0.0,
+  "total": 23.46,
+  "pos_check_no": null
+ },
+ {
+  "order_id": "PS-W-892266",
+  "placed_at": "2026-03-14T01:45:13-04:00",
+  "store_id": 2214,
+  "channel": "web",
+  "fulfilment": "delivery",
+  "status": "completed",
+  "promo_code": null,
+  "customer": {
+   "id": 35596,
+   "name": "Kofi Kim",
+   "email": "kofi.kim@example.org",
+   "phone": "226-555-0172"
+  },
+  "items": [
+   {
+    "sku": "PZ-PEP-L",
+    "name": "Large Pepperoni 14in",
+    "qty": 1,
+    "unit_price": 13.99
+   },
+   {
+    "sku": "BV-POPCAN",
+    "name": "Pop Can 355ml",
+    "qty": 1,
+    "unit_price": 1.79
+   }
+  ],
+  "subtotal": 15.78,
+  "discount": 0.0,
+  "tax": 2.05,
+  "tip": 5.0,
+  "total": 22.83,
+  "pos_check_no": null
+ }
+]
