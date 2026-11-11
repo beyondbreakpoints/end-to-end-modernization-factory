@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_gold_run_legacy",
+    "description": "Runs the reference and legacy Gold milestone only"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "588e8491-7aaa-46b9-a1f3-447e2ef7c0d1"
+  }
+}

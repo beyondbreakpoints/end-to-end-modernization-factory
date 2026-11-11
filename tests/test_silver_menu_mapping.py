@@ -18,7 +18,7 @@ def notebook_cells(name):
     return source.split("# CELL ********************")[1:]
 
 
-def run_notebook(name, spark, tables):
+def run_notebook(name, spark, tables, parameters=None):
     namespace = {
         "spark": SimpleNamespace(
             table=lambda name: tables[name],
@@ -33,6 +33,8 @@ def run_notebook(name, spark, tables):
 
     for cell in notebook_cells(name):
         exec(compile(cell, name, "exec"), namespace)
+        if '"tags":' in cell and '"parameters"' in cell:
+            namespace.update(parameters or {})
         if "def save(" in cell:
             namespace["save"] = save
     return namespace

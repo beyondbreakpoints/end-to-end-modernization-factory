@@ -41,6 +41,8 @@ These decisions are captured from the prior project handoff. Validate against th
 - Use POS/till checks as the sales system of record; link online orders for attribution, not as incremental revenue.
 - Keep reconciliation outputs distinct from production marts and use the external answer key only for validation.
 
+Legacy milestone 1 is now implemented under `gold.legacy_*`, with four versioned `gold.reference_*` tables embedded in a Fabric notebook to avoid a separate data upload. It uses retained Silver source amounts/codes, the original legacy Aloha map, and unsigned shipment cost magnitude rather than applying Silver corrections. Inputs must share one Silver batch and one reference batch; `legacy_run_inputs` captures dependencies and all outputs carry a Gold batch/rules version. Writes replace the period snapshot, not historical partitions, and are not atomic across tables. Local report comparisons passed; Fabric execution and deployed SQL Server/external-export comparisons remain pending. See `docs/gold-legacy.md`; corrected Gold is not yet implemented.
+
 ## Important source-specific semantics
 
 - MICROS check identity joins header/detail by store, business date, and check number. Discount item codes include 9001 (2-for-1 Tuesday), 9002 (WELCOME10), and 9003 (staff 50%). Gift checks are not revenue/royalty; post-close void rows can net a prior check to zero; duplicated checks exist at store 1061 on March 12.

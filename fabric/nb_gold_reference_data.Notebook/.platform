@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_gold_reference_data",
+    "description": "Versioned SliceDW royalty, hierarchy, legacy item map, and adjustment inputs"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9d569e2e-b92b-4f53-998a-5da60caa4e67"
+  }
+}

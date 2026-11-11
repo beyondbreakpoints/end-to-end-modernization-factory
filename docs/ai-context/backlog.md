@@ -34,9 +34,13 @@ Verified Bronze row counts from that run:
 
 ## Gold and reconciliation
 
-- [ ] Assess and agree the Gold implementation plan before coding; Gold has not started.
-- [ ] Read and document the applicable rules in `data/2_legacy_warehouse_slicedw/02_programmability.sql` and the associated legacy SQL/SSIS materials.
-- [ ] Build Gold outputs that reproduce SliceDW numbers before changing business logic; record comparison totals and explain any remaining mismatches.
+- [x] Assess and agree the Gold plan; user approved milestone 1 (reference inputs plus legacy reproduction) on 2026-11-11 and requested a stop for feedback before the next milestone.
+- [x] Read and document the legacy SQL/SSIS dependencies and business rules in `docs/gold-legacy.md`.
+- [x] Implement versioned royalty, hierarchy, legacy Aloha map, and manual-adjustment inputs, preserving both duplicate-credit rows.
+- [x] Implement `nb_gold_legacy` and `nb_gold_run_legacy`; locally compare every report metric to an independent raw-source/Decimal baseline and verify idempotent reruns.
+- [ ] Sync `NG/Dev`, run `nb_gold_run_legacy` in Fabric, and capture statuses, batch ID, counts, and output totals. Local Spark tests do not exercise Fabric Delta writes/orchestration.
+- [ ] Compare legacy Gold with actual SliceDW/externally provided validation exports; do not claim a deployed SQL Server match from local tests alone.
+- [ ] Obtain user feedback/confirmation before starting corrected Gold; implementation stops at milestone 1.
 - [ ] Build corrected Gold outputs with explicit, documented treatments for the known legacy defects, including tax-inclusive Aloha sales, royalty holiday duration, and store 1078's opening date.
 - [ ] Reconcile legacy and corrected outputs to source totals and the offline answer key. Do not copy answer-key material into Git or production artifacts.
 - [ ] Resolve or explicitly document the flagged ambiguous Aloha order match without inventing a link or counting online sales twice.

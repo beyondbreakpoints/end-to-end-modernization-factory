@@ -35,6 +35,14 @@ The previous conversation mentioned “item 3” and later asked for step-by-ste
 - Run these regressions with Java 17 and PySpark 3.5 installed: `python -m unittest discover -s tests -p test_silver_menu_mapping.py -v`.
 - Sync the fixes from `NG/Dev` and rerun `nb_silver_run_all` in Fabric. The earlier failed run may have written `silver.stores`; rerunning overwrites the Silver outputs without changing Bronze.
 
+## Gold milestone 1 handoff
+
+- User reported all Silver notebooks `Succeeded` in Fabric on 2026-11-11, then approved reference inputs plus legacy Gold only and requested a stop for feedback before corrected Gold.
+- `nb_gold_run_legacy` invokes `nb_gold_reference_data` and `nb_gold_legacy` after Silver. No extra uploads are needed; embedded references are versioned snapshots of SliceDW's `03_reference_data.sql`.
+- Legacy defects are preserved intentionally. Local independent source-based comparisons match every report metric, including 190 food-cost rows with no rounding tolerance. Period legacy net sales are $299,572.90 and invoice amount due is $21,061.48; these are incorrect business results retained as the migration baseline.
+- Local tests use Parquet writes in place of Fabric Delta writes. Fabric execution, run-output capture, and deployed SliceDW/external export comparisons remain pending. Details and instructions are in `docs/gold-legacy.md`.
+- Do not proceed to corrected Gold before user feedback/confirmation. The one ambiguous Silver Aloha match remains a corrected/reconciliation task.
+
 ## Provenance
 
 This context was reconstructed from the user-provided `conversation-summary.md` attachment. The repository did not contain that attachment at the time these notes were added. Treat statements about run status, row counts, branch configuration, and workspace state as reported history; re-check live state before relying on them.

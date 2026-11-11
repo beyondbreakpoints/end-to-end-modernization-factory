@@ -18,11 +18,13 @@ Create typed, standardized Delta tables in `silver`. Handle each source's date, 
 
 **Carry-forward notes:** the matching assertions require 1,637 unique MICROS links, 630 unique Aloha links, and one retained ambiguous Aloha match. The ambiguity remains an explicit Gold/reconciliation task, not a notebook failure. Archive the successful run's count/quality output and run identifier for the dossier; these were not included in the user's status report.
 
-## 3. Gold — next: legacy reproduction, then corrected results
+## 3. Gold — legacy milestone implemented; Fabric verification pending
 
 First reproduce SliceDW's existing business rules and numbers as closely as possible from the legacy SQL and SSIS artifacts. Only after establishing that baseline, implement corrected marts and identify each rule that changes a result.
 
-**Next action:** inspect `data/2_legacy_warehouse_slicedw/sql/02_programmability.sql` and associated SQL/SSIS artifacts, document the rule dependencies, and agree the Gold plan before implementing. Gold work has not started.
+**Milestone 1:** the user approved reference inputs and legacy reproduction only on 2026-11-11. `nb_gold_reference_data`, `nb_gold_legacy`, and `nb_gold_run_legacy` implement that scope. Local Spark execution compares every keyed report metric with an independent source-based Decimal baseline, including all 190 food-cost rows, and verifies reruns and batch consistency. Contracts, run instructions, and locally calculated totals are in [`../gold-legacy.md`](../gold-legacy.md).
+
+**Next action:** sync `NG/Dev`, run `nb_gold_run_legacy` in Fabric after a successful Silver batch, and capture the results. Fabric Delta writes/orchestration and deployed SliceDW/external validation comparisons remain pending. Stop for user feedback/confirmation before corrected Gold.
 
 **Gate:** legacy reproduction is compared to SliceDW; corrected outputs document their differences and reconcile to Silver/source totals.
 

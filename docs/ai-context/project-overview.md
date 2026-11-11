@@ -31,7 +31,7 @@ The intended work order is:
 
 ## Current state
 
-According to the prior session handoff, Bronze is implemented and was run successfully by the user in Fabric, with all notebook assertions passing. Silver transformations and an ordered runner are now implemented on `NG/Dev`; they still need to be synchronized to and executed in Fabric. The Gold, reconciliation, Azure SQL, and dossier phases remain ahead. Treat this as a handoff snapshot, not a live check of the Fabric workspace or Silver execution.
+Bronze was successfully run by the user in Fabric, and on 2026-11-11 the user reported all Silver notebooks `Succeeded`. Gold milestone 1 (reference inputs and legacy reproduction) is now implemented on `NG/Dev` and locally validated; its Fabric run and external baseline comparison remain pending. Corrected Gold, reconciliation, Azure SQL, and dossier phases remain ahead. The user requested feedback/confirmation before continuing beyond Gold milestone 1. Treat workspace execution status as user-reported, not independently inspected.
 
 ## Success criteria
 
