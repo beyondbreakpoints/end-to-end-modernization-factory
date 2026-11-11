@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_master_data",
+    "description": "Types and validates head-office reference data for Silver"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a27605dc-35be-4439-b2e9-5a03964c3788"
+  }
+}

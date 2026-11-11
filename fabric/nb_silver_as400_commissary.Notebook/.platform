@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_as400_commissary",
+    "description": "Decodes AS/400 dates, decimals, credits, and shipment units"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "aaa4519f-430e-4544-8f30-a99fd64f7e12"
+  }
+}

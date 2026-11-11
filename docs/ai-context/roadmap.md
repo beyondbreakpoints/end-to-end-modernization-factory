@@ -8,11 +8,13 @@ Ingest each source faithfully into raw Delta tables in `bronze`, attach file/bat
 
 **Gate:** all five loaders and the orchestration notebook complete; expected source-file/row checks pass; all tables retain ingestion metadata.
 
-## 2. Silver — next
+## 2. Silver — implemented, Fabric validation pending
 
 Create typed, standardized Delta tables in `silver`. Handle each source's date, money, identifier, and unit conventions. Retain flags and source evidence for anomalies rather than silently dropping rows. Establish explicit POS/app matching so completed online orders are linked to, not added on top of, till sales.
 
 **Gate:** transformations run in Fabric; keys and business-date rules are validated; anomaly and matching counts are explainable; source lineage survives.
+
+**Current status:** implementation is now checked into `NG/Dev` as five source notebooks plus `nb_silver_run_all`. The gate still requires syncing and running these notebooks in Fabric; see [`backlog.md`](backlog.md).
 
 ## 3. Gold — legacy reproduction, then corrected results
 

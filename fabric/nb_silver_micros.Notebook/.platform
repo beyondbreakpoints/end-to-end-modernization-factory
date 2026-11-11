@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_micros",
+    "description": "Types MICROS checks and preserves duplicate, gift, void, and mapping flags"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "fac183ea-483b-4b6a-b471-b06e4e2620fa"
+  }
+}

@@ -20,6 +20,13 @@ This file retains project-operating details from the prior session that do not b
 
 The previous conversation mentioned “item 3” and later asked for step-by-step guidance. The prior assistant interpreted that as the upload step, but the phrase could have referred to Gold. Silver must precede Gold; confirm the intended step if this comes up again.
 
+## Silver implementation handoff
+
+- Five source-specific Silver notebooks and `nb_silver_run_all` are now in `fabric/`; run the orchestrator only after Bronze is available.
+- The Silver runner calls master data, MICROS, Aloha, AS/400, then online app so its lookup and POS-matching dependencies exist.
+- Silver flags and retains anomalous rows; Gold must explicitly decide business inclusion. `_batch_id` remains Bronze provenance, while `_silver_batch_id` identifies the transformation run.
+- Local Python syntax and Fabric metadata were checked; live Spark/Fabric execution and output assertions remain pending.
+
 ## Provenance
 
 This context was reconstructed from the user-provided `conversation-summary.md` attachment. The repository did not contain that attachment at the time these notes were added. Treat statements about run status, row counts, branch configuration, and workspace state as reported history; re-check live state before relying on them.
