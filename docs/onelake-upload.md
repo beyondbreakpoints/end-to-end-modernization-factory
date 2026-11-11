@@ -20,8 +20,7 @@ README.md files are optional (the notebooks ignore them).
 
 ## Option 1: Fabric UI
 1. Open the workspace, then `lh_polarslice`.
-2. In the Explorer, hover **Files** > `...` > **New subfolder** > `Files`.
-3. On `Files` choose `...` > **Upload** > **Upload folder**, and select each of `master_data`, `micros`, `aloha`, `online_app`, `as400_commissary` from `data\1_source_systems\`.
+2. In the Explorer, click `...` on **Files** > **Upload** > **Upload folder**, and select each of `master_data`, `micros`, `aloha`, `online_app`, `as400_commissary` from `data\1_source_systems\`.
 
 ## Option 2: OneLake file explorer
 1. Install OneLake file explorer for Windows and sign in; the workspace appears in File Explorer.
