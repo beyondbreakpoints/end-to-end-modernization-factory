@@ -3,12 +3,18 @@
 # METADATA ********************
 
 # META {
-# META   "kernel_info": {"name": "synapse_pyspark"},
+# META   "kernel_info": {
+# META     "name": "synapse_pyspark"
+# META   },
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "f8d5782d-d817-44fe-a071-613af0122930",
 # META       "default_lakehouse_name": "lh_polarslice",
-# META       "known_lakehouses": [{"id": "f8d5782d-d817-44fe-a071-613af0122930"}]
+# META       "known_lakehouses": [
+# META         {
+# META           "id": "f8d5782d-d817-44fe-a071-613af0122930"
+# META         }
+# META       ]
 # META     }
 # META   }
 # META }
@@ -30,7 +36,9 @@ period_end = "2026-03-13"
 # META {
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark",
-# META   "tags": ["parameters"]
+# META   "tags": [
+# META     "parameters"
+# META   ]
 # META }
 
 # CELL ********************
@@ -94,7 +102,10 @@ save(spark.createDataFrame(manifest,
 
 # METADATA ********************
 
-# META {"language": "python", "language_group": "synapse_pyspark"}
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -152,7 +163,10 @@ save(fact_online, "legacy_fact_online_orders", keys=("order_id",), money=("net_s
 
 # METADATA ********************
 
-# META {"language": "python", "language_group": "synapse_pyspark"}
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -205,7 +219,10 @@ save(promo, "legacy_promo_cost", keys=("store_id", "business_date", "promo_name"
 
 # METADATA ********************
 
-# META {"language": "python", "language_group": "synapse_pyspark"}
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -291,7 +308,10 @@ save(food, "legacy_food_cost_variance", keys=("store_id", "period_start", "perio
 
 # METADATA ********************
 
-# META {"language": "python", "language_group": "synapse_pyspark"}
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -334,7 +354,10 @@ save(spark.sql("""
 
 # METADATA ********************
 
-# META {"language": "python", "language_group": "synapse_pyspark"}
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -368,4 +391,7 @@ assert spark.sql("""
 
 # METADATA ********************
 
-# META {"language": "python", "language_group": "synapse_pyspark"}
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }

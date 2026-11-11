@@ -3,12 +3,18 @@
 # METADATA ********************
 
 # META {
-# META   "kernel_info": {"name": "synapse_pyspark"},
+# META   "kernel_info": {
+# META     "name": "synapse_pyspark"
+# META   },
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "f8d5782d-d817-44fe-a071-613af0122930",
 # META       "default_lakehouse_name": "lh_polarslice",
-# META       "known_lakehouses": [{"id": "f8d5782d-d817-44fe-a071-613af0122930"}]
+# META       "known_lakehouses": [
+# META         {
+# META           "id": "f8d5782d-d817-44fe-a071-613af0122930"
+# META         }
+# META       ]
 # META     }
 # META   }
 # META }
@@ -29,7 +35,9 @@ period_end = "2026-03-13"
 # META {
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark",
-# META   "tags": ["parameters"]
+# META   "tags": [
+# META     "parameters"
+# META   ]
 # META }
 
 # CELL ********************
@@ -48,7 +56,10 @@ for nb in ["nb_gold_reference_data", "nb_gold_legacy"]:
 
 # METADATA ********************
 
-# META {"language": "python", "language_group": "synapse_pyspark"}
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -61,4 +72,7 @@ spark.table("gold.legacy_food_cost_variance").filter("item_code = 'MOZ00410'").o
 
 # METADATA ********************
 
-# META {"language": "python", "language_group": "synapse_pyspark"}
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }

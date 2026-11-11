@@ -15,6 +15,7 @@ This file retains project-operating details from the prior session that do not b
 - The answer key is for checking only. It must remain outside the public repository, commits, notebooks, and pipeline.
 - A previous worktree/branch name and past PR numbers in the handoff are historical references, not instructions to reuse them.
 - Guide Fabric UI operations one step at a time when user interaction is needed.
+- Write notebook `# META` blocks in Fabric's canonical multi-line, 2-space-indented JSON (as Fabric exports it). Gold notebooks first committed with compact one-line META JSON failed in Fabric with "No default context found, please attach a lakehouse" in `nb_gold_reference_data`; normalizing the format to match the working Silver notebooks was the fix. If it recurs, open the runner in Fabric, attach `lh_polarslice` as its default lakehouse, and rerun.
 
 ## Handoff uncertainty
 

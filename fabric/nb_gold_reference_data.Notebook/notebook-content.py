@@ -3,12 +3,18 @@
 # METADATA ********************
 
 # META {
-# META   "kernel_info": {"name": "synapse_pyspark"},
+# META   "kernel_info": {
+# META     "name": "synapse_pyspark"
+# META   },
 # META   "dependencies": {
 # META     "lakehouse": {
 # META       "default_lakehouse": "f8d5782d-d817-44fe-a071-613af0122930",
 # META       "default_lakehouse_name": "lh_polarslice",
-# META       "known_lakehouses": [{"id": "f8d5782d-d817-44fe-a071-613af0122930"}]
+# META       "known_lakehouses": [
+# META         {
+# META           "id": "f8d5782d-d817-44fe-a071-613af0122930"
+# META         }
+# META       ]
 # META     }
 # META   }
 # META }
@@ -28,7 +34,9 @@ batch_id = ""
 # META {
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark",
-# META   "tags": ["parameters"]
+# META   "tags": [
+# META     "parameters"
+# META   ]
 # META }
 
 # CELL ********************
@@ -52,7 +60,10 @@ def save(df, table):
 
 # METADATA ********************
 
-# META {"language": "python", "language_group": "synapse_pyspark"}
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -101,7 +112,10 @@ save(aloha_map, "reference_legacy_aloha_map")
 
 # METADATA ********************
 
-# META {"language": "python", "language_group": "synapse_pyspark"}
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # CELL ********************
 
@@ -131,4 +145,7 @@ save(adjustments, "reference_manual_adjustments")
 
 # METADATA ********************
 
-# META {"language": "python", "language_group": "synapse_pyspark"}
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
