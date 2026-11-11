@@ -22,7 +22,7 @@
 # MARKDOWN ********************
 
 # # Bronze: master data (head office)
-# Loads `Files/polar_slice/master_data/*.csv` as raw all-string Delta tables in `bronze`, plus load metadata. No typing or cleaning here.
+# Loads `Files/master_data/*.csv` as raw all-string Delta tables in `bronze`, plus load metadata. No typing or cleaning here.
 
 # CELL ********************
 
@@ -44,7 +44,7 @@ batch_id = ""
 import uuid
 from pyspark.sql import functions as F
 
-BASE = "Files/polar_slice"
+BASE = "Files"
 SCHEMA = "bronze"
 BATCH_ID = batch_id or str(uuid.uuid4())
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA}")

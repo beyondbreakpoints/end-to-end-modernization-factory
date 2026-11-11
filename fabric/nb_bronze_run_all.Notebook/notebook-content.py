@@ -22,7 +22,7 @@
 # MARKDOWN ********************
 
 # # Bronze: run all
-# Runs the five Bronze notebooks with a shared batch id, then prints row counts for every `bronze` table. Upload the files to `Files/polar_slice/` first (see `docs/onelake-upload.md`).
+# Runs the five Bronze notebooks with a shared batch id, then prints row counts for every `bronze` table. Upload the files to `Files/` first (see `docs/onelake-upload.md`).
 
 # CELL ********************
 
@@ -33,7 +33,7 @@ notebooks = ["nb_bronze_master_data", "nb_bronze_micros", "nb_bronze_aloha",
              "nb_bronze_online_app", "nb_bronze_as400_commissary"]
 for nb in notebooks:
     print(f"running {nb} (batch {batch_id})")
-    notebookutils.notebook.run(nb, 1800, {"batch_id": batch_id})
+    notebookutils.notebook.run(nb, 1800, {"batch_id": batch_id, "useRootDefaultLakehouse": True})
 
 # METADATA ********************
 
