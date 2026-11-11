@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts" DTS:refId="Package" DTS:ExecutableType="Microsoft.Package" DTS:ObjectName="LoadAdjustments" DTS:CreationDate="01/09/2023 11:27:16" DTS:CreatorName="POLARSLICE\etl_svc" DTS:CreatorComputerName="PSETL01" DTS:VersionBuild="45">
+ <DTS:ConnectionManagers>
+  <DTS:ConnectionManager DTS:ObjectName="OLEDB_SliceDW" DTS:CreationName="OLEDB" DTS:DTSID="{6F1D2A10-0B6B-4C2E-9D11-5A1D0C0A0001}"><DTS:ObjectData><DTS:ConnectionManager DTS:ConnectionString="Data Source=PSSQL01;Initial Catalog=SliceDW;Provider=SQLNCLI11.1;Integrated Security=SSPI;" /></DTS:ObjectData></DTS:ConnectionManager>
+  <DTS:ConnectionManager DTS:ObjectName="XL_Adjustments" DTS:CreationName="EXCEL"><DTS:ObjectData><DTS:ConnectionManager DTS:ConnectionString="Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\\psfs01\finance\royalty\ManualAdjustments_*.xlsx;Extended Properties=&quot;Excel 12.0 XML;HDR=YES&quot;;" /></DTS:ObjectData></DTS:ConnectionManager>
+ </DTS:ConnectionManagers>
+ <DTS:Executables>
+  <DTS:Executable DTS:refId="Package\DFT Manual adjustments" DTS:ExecutableType="Microsoft.Pipeline" DTS:ObjectName="DFT Manual adjustments">
+   <DTS:ObjectData><pipeline version="1"><components>
+    <component name="SRC XL_Adjustments" componentClassID="Microsoft.ExcelSource"><connections><connection connectionManagerRefId="Package.ConnectionManagers[XL_Adjustments]" /></connections></component>
+    <component name="DST [adj].[ManualAdjustment]" componentClassID="Microsoft.OLEDBDestination"><properties><property name="OpenRowset">[adj].[ManualAdjustment]</property><property name="AccessMode">3</property></properties><connections><connection connectionManagerRefId="Package.ConnectionManagers[OLEDB_SliceDW]" /></connections></component>
+   </components></pipeline></DTS:ObjectData>
+  </DTS:Executable>
+ </DTS:Executables>
+ <DTS:PrecedenceConstraints>
+ </DTS:PrecedenceConstraints>
+</DTS:Executable>

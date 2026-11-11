@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_bronze_run_all",
+    "description": "Runs all Bronze notebooks with one batch id and prints row counts"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "13405cd0-5fe9-4dab-884c-49f6d1340b2c"
+  }
+}

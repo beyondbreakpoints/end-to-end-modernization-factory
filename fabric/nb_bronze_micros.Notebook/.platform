@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_bronze_micros",
+    "description": "Bronze load: MICROS pipe-delimited check header/detail"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ba79ce7c-030d-4ae1-8682-7fd62fbe1f33"
+  }
+}
