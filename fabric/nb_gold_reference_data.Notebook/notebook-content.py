@@ -8,11 +8,16 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
-# META       "default_lakehouse": "f8d5782d-d817-44fe-a071-613af0122930",
-# META       "default_lakehouse_name": "lh_polarslice",
-# META       "known_lakehouses": [
+# META       "default_lakehouse_name": "",
+# META       "default_lakehouse_workspace_id": "",
+# META       "known_lakehouses": []
+# META     },
+# META     "warehouse": {
+# META       "default_warehouse": "05e722ee-b589-4500-a970-a106a159eade",
+# META       "known_warehouses": [
 # META         {
-# META           "id": "f8d5782d-d817-44fe-a071-613af0122930"
+# META           "id": "05e722ee-b589-4500-a970-a106a159eade",
+# META           "type": "Lakewarehouse"
 # META         }
 # META       ]
 # META     }
@@ -33,10 +38,7 @@ batch_id = ""
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark",
-# META   "tags": [
-# META     "parameters"
-# META   ]
+# META   "language_group": "synapse_pyspark"
 # META }
 
 # CELL ********************
