@@ -281,7 +281,8 @@ after_midnight_out = spark.sql(f"""
 rows.append(("ALOHA_DOB_OUTSIDE_PERIOD", int(after_midnight_out.n), float(after_midnight_out.amt or 0),
              "After-midnight Aloha checks (DOB before period start, close_ts in period); in legacy, absent from corrected"))
 
-anomaly_df = spark.createDataFrame(rows, "category STRING, check_count INT, net_sales_impact DECIMAL(19,4), description STRING")
+anomaly_df = (spark.createDataFrame(rows, "category STRING, check_count INT, net_sales_impact DOUBLE, description STRING")
+              .withColumn("net_sales_impact", F.col("net_sales_impact").cast("DECIMAL(19,4)")))
 save(anomaly_df, "reconcile_anomaly_summary")
 
 for row in anomaly_df.orderBy("category").collect():
