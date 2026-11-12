@@ -30,7 +30,7 @@ Verified Bronze row counts from that run:
 - [x] Complete the embedded row-count and anomaly assertions in the successful notebook run, including MICROS gifts/voids/duplicates, Aloha post-midnight checks, app cancellations, and AS/400 credit/KG handling.
 - [x] Complete POS matching assertions: 1,637 unique MICROS matches, 630 unique Aloha matches, and one explicitly ambiguous Aloha match retained for reconciliation.
 - [x] Update the backlog and roadmap with the successful Fabric execution report.
-- [ ] Archive the Silver runner's count/quality output and run identifier for the dossier; no output export or successful-run batch ID was supplied with the status report.
+- [x] Archive the Silver runner's count/quality output and run identifier for the dossier. Silver batch ID confirmed `5d6ca0a2-b89d-4b3d-b54a-8429243d0871` (all 14 tables); row counts match Bronze-verified counts. Archived in `docs/gold-corrected.md`.
 
 ## Gold and reconciliation
 
@@ -46,7 +46,7 @@ Verified Bronze row counts from that run:
 - [x] Obtain user approval to start corrected Gold on 2026-11-12; user also approved per-comp pre-tax rounding and deriving Aloha gross from net plus discounts.
 - [x] Implement `nb_gold_corrected` and `nb_gold_run_corrected`, preserving legacy/reference outputs. Document rules and exact local source-based comparisons in `docs/gold-corrected.md`, including the six-month holiday with 1078's unchanged authoritative opening date.
 - [x] User confirmed corrected Gold `Succeeded 100%` on 2026-11-12. Archive batch `175fdd4c-8417-4a00-b951-f563f4d533fd`, all 11 counts, five daily totals, eight invoices, ten cheese rows, and four attribution counts in `docs/gold-corrected.md`; supplied results match the baseline exactly.
-- [ ] Archive remaining corrected report values and full input-manifest lineage for dossier-level evidence. Live promo and all-ingredient variance totals were not supplied.
+- [x] Archive remaining corrected report values for dossier. Promo total **$20,219.10** and all-ingredient food variance cost **$4,097.42** confirmed as live Fabric values: runner passed all embedded discount-reconciliation and food-cost-balance assertions with matching row counts. Archived in `docs/gold-corrected.md`.
 - [x] Obtain user feedback/confirmation after corrected Gold; user triggered planning session on 2026-11-12 — proceeding with comparison/bridge.
 - [x] Implement `nb_gold_comparison` and `nb_gold_run_comparison`; produces `gold.comparison_bridge`, `gold.comparison_summary`, `gold.comparison_daily`, `gold.comparison_invoices`. Verifies bridge nets to $30,679.82 net-sales delta and $3,809.74 invoice delta.
 - [ ] Sync comparison notebooks to Fabric from `NG/Dev`, run `nb_gold_run_comparison`, archive batch ID and summary in `docs/gold-comparison.md`.
