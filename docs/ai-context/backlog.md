@@ -51,7 +51,7 @@ Verified Bronze row counts from that run:
 - [x] Implement `nb_gold_comparison` and `nb_gold_run_comparison`; produces `gold.comparison_bridge`, `gold.comparison_summary`, `gold.comparison_daily`, `gold.comparison_invoices`. Verifies bridge nets to $30,679.82 net-sales delta and $3,809.74 invoice delta.
 - [x] Synced to Fabric and ran `nb_gold_run_comparison` on 2026-11-12. Batch `ff7553d1-0cde-409b-9caf-06cebecfb179` succeeded. Full waterfall, daily, and invoice comparison archived in `docs/gold-comparison.md`. Bridge nets exactly to −$30,679.82 and −$3,809.74.
 - [x] Implement `nb_gold_reconcile` and `nb_gold_run_reconcile` (2026-11-12). Reconciles corrected Gold to Silver MICROS and Aloha with zero-residual assertions. Produces `gold.reconcile_anomaly_summary` (7 rows), `gold.reconcile_daily_cross_system` (50 rows), `gold.reconcile_slicedw` (12 rows). SliceDW formula equivalence documented; food-cost commissary is the one known DIFFERS.
-- [ ] Sync to Fabric and run `nb_gold_run_reconcile`. Archive batch ID and anomaly summary in `docs/gold-reconcile.md`.
+- [x] Synced to Fabric and ran `nb_gold_run_reconcile` on 2026-11-12. Batch `8bb1ddcf-b5e5-4852-ba84-a8c3351a04c9`. All residuals = 0.00. Full anomaly summary and SliceDW equivalence archived in `docs/gold-reconcile.md`.
 - [ ] Offline answer-key validation: run externally against answer key only; do not commit answer-key content or comparison output.
 - [x] Explicitly retain the ambiguous Aloha app order without a definitive link or incremental revenue in corrected attribution; POS remains the sales system of record. External reconciliation remains pending.
 
