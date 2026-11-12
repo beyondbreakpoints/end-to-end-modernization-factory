@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_gold_comparison",
+    "description": "Bridges legacy and corrected Gold milestones at check and period level"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b3c14e82-5a71-4f9d-a023-8e2d9f1c3b47"
+  }
+}

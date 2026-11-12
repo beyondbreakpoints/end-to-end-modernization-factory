@@ -47,7 +47,9 @@ Verified Bronze row counts from that run:
 - [x] Implement `nb_gold_corrected` and `nb_gold_run_corrected`, preserving legacy/reference outputs. Document rules and exact local source-based comparisons in `docs/gold-corrected.md`, including the six-month holiday with 1078's unchanged authoritative opening date.
 - [x] User confirmed corrected Gold `Succeeded 100%` on 2026-11-12. Archive batch `175fdd4c-8417-4a00-b951-f563f4d533fd`, all 11 counts, five daily totals, eight invoices, ten cheese rows, and four attribution counts in `docs/gold-corrected.md`; supplied results match the baseline exactly.
 - [ ] Archive remaining corrected report values and full input-manifest lineage for dossier-level evidence. Live promo and all-ingredient variance totals were not supplied.
-- [ ] Obtain user feedback/confirmation after corrected Gold before starting comparison/bridge outputs.
+- [x] Obtain user feedback/confirmation after corrected Gold; user triggered planning session on 2026-11-12 — proceeding with comparison/bridge.
+- [x] Implement `nb_gold_comparison` and `nb_gold_run_comparison`; produces `gold.comparison_bridge`, `gold.comparison_summary`, `gold.comparison_daily`, `gold.comparison_invoices`. Verifies bridge nets to $30,679.82 net-sales delta and $3,809.74 invoice delta.
+- [ ] Sync comparison notebooks to Fabric from `NG/Dev`, run `nb_gold_run_comparison`, archive batch ID and summary in `docs/gold-comparison.md`.
 - [ ] Reconcile legacy and corrected outputs to source totals and the offline answer key. Do not copy answer-key material into Git or production artifacts.
 - [x] Explicitly retain the ambiguous Aloha app order without a definitive link or incremental revenue in corrected attribution; POS remains the sales system of record. External reconciliation remains pending.
 

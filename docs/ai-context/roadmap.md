@@ -32,7 +32,7 @@ First reproduce SliceDW's existing business rules and numbers as closely as poss
 
 **Corrected Fabric evidence:** on 2026-11-12 the user reported `nb_gold_corrected Succeeded 100%` and supplied batch `175fdd4c-8417-4a00-b951-f563f4d533fd`. All 11 counts, five daily totals, eight invoice rows, ten cheese rows, and four attribution counts match the local baseline exactly and are archived in [`../gold-corrected.md`](../gold-corrected.md). Live net sales total 268,893.08 and invoices total 17,251.74. The all-ingredient variance and promo totals above remain local-only; their live values were not supplied.
 
-**Next action:** obtain user feedback/confirmation before implementing the legacy-to-corrected comparison/bridge with attributable, balancing rule changes. Full input lineage and remaining live report evidence still need archiving for the dossier; deployed SliceDW/external validation comparisons remain pending.
+**Comparison/bridge (implemented 2026-11-12):** `nb_gold_comparison` and `nb_gold_run_comparison` added to `fabric/`. Produces `gold.comparison_bridge` (check-level delta with exclusion reason), `gold.comparison_summary` (period waterfall), `gold.comparison_daily` (store/day), `gold.comparison_invoices`. Verification asserts that the bridge nets to the $30,679.82 and $3,809.74 documented deltas. **Next action:** sync to Fabric from `NG/Dev`, run `nb_gold_run_comparison`, archive results in `docs/gold-comparison.md`. Full input lineage and remaining live report evidence still need archiving for the dossier.
 
 **Gate:** legacy reproduction is compared to SliceDW; corrected outputs document their differences and reconcile to Silver/source totals.
 
