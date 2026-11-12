@@ -76,14 +76,20 @@ spark.table("silver.aloha_checks").createOrReplaceTempView("gb_sa")
 # CELL ********************
 
 # --- MICROS bridge ---
-# Legacy: all void_flag='N' checks (includes gifts, void-matched originals, duplicates)
-# Corrected: excludes gifts, excludes both sides of matched void pairs, keeps one per duplicate group
+# Legacy includes gift checks, both sides of void pairs, and duplicate rows (24 in Silver).
+# Corrected excludes gifts, void-matched pairs, and deduplicates to one row per check_id.
+# Aggregate legacy by (store_id, business_date, check_id) BEFORE joining: a check that
+# appears twice in legacy_fact_checks contributes 2X to the legacy total. Without the
+# aggregation a FULL OUTER JOIN (2 legacy rows × 1 corrected row) would produce 2 bridge
+# rows and compute 2(Y-X)=0 instead of Y-2X=-X, hiding the duplicate-check delta.
 
 spark.sql(f"""
-    SELECT store_id, business_date, check_id, net_sales AS legacy_net_sales
+    SELECT store_id, business_date, check_id,
+           SUM(net_sales) AS legacy_net_sales
     FROM gold.legacy_fact_checks
     WHERE source_system = 'MICROS'
       AND business_date BETWEEN DATE '{period_start}' AND DATE '{period_end}'
+    GROUP BY store_id, business_date, check_id
 """).createOrReplaceTempView("gb_micros_legacy")
 
 spark.sql(f"""
@@ -93,35 +99,22 @@ spark.sql(f"""
       AND business_date BETWEEN DATE '{period_start}' AND DATE '{period_end}'
 """).createOrReplaceTempView("gb_micros_corrected")
 
-# Join silver to classify MICROS-legacy-only exclusion reasons
 spark.sql(f"""
-    SELECT l.store_id, l.business_date, l.check_id,
+    SELECT COALESCE(l.store_id, c.store_id) AS store_id,
+           COALESCE(l.business_date, c.business_date) AS business_date,
+           COALESCE(l.check_id, c.check_id) AS check_id,
            COALESCE(l.legacy_net_sales, 0) AS legacy_net_sales,
            COALESCE(c.corrected_net_sales, 0) AS corrected_net_sales,
            COALESCE(c.corrected_net_sales, 0) - COALESCE(l.legacy_net_sales, 0) AS net_sales_delta,
            CASE
                WHEN c.check_id IS NOT NULL AND l.check_id IS NOT NULL THEN 'BOTH'
-               WHEN c.check_id IS NULL AND s.is_gift_check THEN 'GIFT_EXCLUDED'
-               WHEN c.check_id IS NULL AND s.is_void_reversal THEN 'VOID_REVERSAL_EXCLUDED'
-               WHEN c.check_id IS NULL AND EXISTS (
-                   SELECT 1 FROM gb_sm sv WHERE sv.store_id = l.store_id
-                     AND sv.business_date = l.business_date
-                     AND CAST(sv.check_no AS STRING) = l.check_id
-                     AND sv.void_flag = 'V'
-               ) THEN 'VOID_MATCHED_EXCLUDED'
-               WHEN c.check_id IS NULL AND s.is_duplicate_check THEN 'DUPLICATE_EXCLUDED'
-               WHEN c.check_id IS NULL THEN 'LEGACY_ONLY_OTHER'
-               ELSE 'CORRECTED_ONLY'
+               WHEN c.check_id IS NULL THEN 'MICROS_LEGACY_ONLY'
+               ELSE 'MICROS_CORRECTED_ONLY'
            END AS exclusion_reason,
            'MICROS' AS source_system
     FROM gb_micros_legacy l
     FULL OUTER JOIN gb_micros_corrected c
       ON l.store_id = c.store_id AND l.business_date = c.business_date AND l.check_id = c.check_id
-    LEFT JOIN gb_sm s
-      ON s.store_id = COALESCE(l.store_id, c.store_id)
-     AND s.business_date = COALESCE(l.business_date, c.business_date)
-     AND CAST(s.check_no AS STRING) = COALESCE(l.check_id, c.check_id)
-     AND s.void_flag = 'N'
 """).createOrReplaceTempView("gb_micros_bridge")
 
 # METADATA ********************
