@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_gold_run_reconcile",
+    "description": "Runs the source reconciliation without touching prior milestone outputs"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e1f4b253-7a02-5c3e-9e46-0b8f1b2d6c38"
+  }
+}
