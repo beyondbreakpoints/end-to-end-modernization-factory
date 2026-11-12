@@ -40,7 +40,8 @@ Verified Bronze row counts from that run:
 - [x] Implement `nb_gold_legacy` and `nb_gold_run_legacy`; locally compare every report metric to an independent raw-source/Decimal baseline and verify idempotent reruns.
 - [x] Resolve the incorrect default lakehouse attachment and missing native parameter-cell markers; add Silver runner output-batch validation.
 - [x] Run `nb_gold_run_legacy` in Fabric; the user confirmed successful execution on 2026-11-12.
-- [ ] Archive the successful Gold batch ID, counts, and output totals and compare with the documented local baseline; the success report did not include these outputs.
+- [x] Archive the supplied Gold batch ID, all 18 output counts, five daily totals, nine invoices, and ten cheese-variance rows in `docs/gold-legacy.md`. User-supplied batch `07e7a5f4-2a8a-4884-9b80-58fb1c76c640` matches the local contracts and compared financial/quantity values exactly.
+- [ ] Archive the successful Silver ID and full Gold input manifest and remaining report outputs for dossier-level lineage and live row-by-row evidence; the supplied console extract does not cover these.
 - [ ] Compare legacy Gold with actual SliceDW/externally provided validation exports; do not claim a deployed SQL Server match from local tests alone.
 - [ ] Obtain user feedback/confirmation before starting corrected Gold; implementation stops at milestone 1.
 - [ ] Build corrected Gold outputs with explicit, documented treatments for the known legacy defects, including tax-inclusive Aloha sales, royalty holiday duration, and store 1078's opening date.

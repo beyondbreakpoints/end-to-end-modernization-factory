@@ -8,7 +8,7 @@ This milestone reproduces SliceDW's March 9-13, 2026 facts and reports **without
 - `nb_gold_legacy`: writes the legacy facts, reports, and input manifest.
 - `nb_gold_run_legacy`: executes those two notebooks in order with one Gold batch ID.
 
-Local PySpark execution passed against the committed source pack. Every keyed report row was compared to an independent Python/Decimal calculation of the legacy SQL rules. On 2026-11-12 the user confirmed `nb_gold_run_legacy` ran successfully in Fabric after resolving the lakehouse attachment and native parameter-cell markers. The successful run's batch ID, counts, and totals have not yet been supplied for comparison with the local baseline. This is not a comparison against deployed SQL Server/answer-key exports. Corrected Gold and formal reconciliation are not implemented in this milestone.
+Local PySpark execution passed against the committed source pack. Every keyed report row was compared to an independent Python/Decimal calculation of the legacy SQL rules. On 2026-11-12 the user confirmed `nb_gold_run_legacy` ran successfully in Fabric after resolving the lakehouse attachment and native parameter-cell markers. The supplied Fabric counts, daily totals, nine invoice rows, and ten cheese-variance rows match the local baseline; evidence and comparison limits are archived below. This is not a comparison against deployed SQL Server/answer-key exports. Corrected Gold and formal reconciliation are not implemented in this milestone.
 
 ## Fabric execution
 
@@ -97,3 +97,86 @@ python -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
 No generators are executed, and no answer-key files are read or generated. External SliceDW/answer-key comparison remains pending. Preserve the one ambiguous Aloha online match for the corrected/reconciliation milestone; legacy reproduction deliberately does not use it.
+
+## Fabric run evidence: 2026-11-12
+
+Provenance: user-supplied console output from the successful `nb_gold_run_legacy` run, not a direct workspace inspection. Gold batch ID: `07e7a5f4-2a8a-4884-9b80-58fb1c76c640`, shown in all nine invoice rows. Rules version: `slicedw-legacy-march-2026-v1`. Reporting period: **2026-03-09 through 2026-03-13**. The cheese display truncated lineage strings; the successful Silver batch ID and the 16 input-manifest records were not supplied.
+
+### Output counts
+
+All 18 supplied counts match the documented local contracts.
+
+| Gold table | Fabric rows |
+|---|---:|
+| `legacy_daily_sales` | 50 |
+| `legacy_dim_items` | 19 |
+| `legacy_fact_check_lines` | 25,681 |
+| `legacy_fact_checks` | 9,269 |
+| `legacy_fact_online_orders` | 2,296 |
+| `legacy_food_cost_variance` | 190 |
+| `legacy_franchisee_invoices` | 7 |
+| `legacy_promo_cost` | 72 |
+| `legacy_region_daily_sales` | 85 |
+| `legacy_royalty_invoices` | 9 |
+| `legacy_run_inputs` | 16 |
+| `legacy_shipments` | 564 |
+| `legacy_stock_counts` | 380 |
+| `legacy_store_day_sales` | 50 |
+| `reference_legacy_aloha_map` | 15 |
+| `reference_manual_adjustments` | 5 |
+| `reference_org_units` | 17 |
+| `reference_royalty_terms` | 3 |
+
+### Daily net sales
+
+| Business date | Fabric net sales |
+|---|---:|
+| 2026-03-09 | 47,906.4100 |
+| 2026-03-10 | 65,533.7700 |
+| 2026-03-11 | 50,141.5300 |
+| 2026-03-12 | 55,974.5300 |
+| 2026-03-13 | 80,016.6600 |
+| **Total** | **299,572.9000** |
+
+### Royalty invoices
+
+All rows use the period, batch ID, and rules version above. Amounts are retained at the displayed four-decimal precision.
+
+| Franchisee | Franchisee name | Store | Net sales | Royalty | Ad fund | Adjustments | Amount due |
+|---|---|---:|---:|---:|---:|---:|---:|
+| F001 | Rana Holdings Inc. | 1042 | 34992.0500 | 1749.6000 | 1049.7600 | -150.0000 | 2649.3600 |
+| F001 | Rana Holdings Inc. | 1055 | 32394.0000 | 1619.7000 | 971.8200 | -240.0000 | 2351.5200 |
+| F002 | Kostas Food Group Ltd. | 1043 | 28318.4400 | 1415.9200 | 849.5500 | 0.0000 | 2265.4700 |
+| F003 | Steeltown Slices Inc. | 1061 | 25188.9200 | 1259.4500 | 755.6700 | 0.0000 | 2015.1200 |
+| F004 | Lakeshore QSR Corp. | 1078 | 19532.2300 | 976.6100 | 585.9700 | 0.0000 | 1562.5800 |
+| F005 | Dhillon Family Foods Ltd. | 1090 | 27645.4400 | 1382.2700 | 829.3600 | 25.0000 | 2236.6300 |
+| F006 | Rideau Pizza Partners | 2207 | 40391.7900 | 2019.5900 | 1211.7500 | 85.0000 | 3316.3400 |
+| F006 | Rideau Pizza Partners | 2214 | 30907.0500 | 1545.3500 | 927.2100 | 0.0000 | 2472.5600 |
+| F007 | Georgian Bay Eats Inc. | 2231 | 27398.7300 | 1369.9400 | 821.9600 | 0.0000 | 2191.9000 |
+
+Total invoice amount due: **21,061.4800**.
+
+### Cheese variance: `MOZ00410`
+
+All rows use the reporting period above. These are legacy quantities, including the intentionally wrong case treatment of KG shipments.
+
+| Store | Opening | Received | Closing | Actual usage | Theoretical usage | Variance | Variance % | Variance cost |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1042 | 203.700 | 710.000 | 331.600 | 582.100 | 564.590 | 17.510 | 3.1 | 147.9600 |
+| 1043 | 166.600 | 580.000 | 273.300 | 473.300 | 456.096 | 17.204 | 3.8 | 145.3700 |
+| 1055 | 256.800 | 730.000 | 357.400 | 629.400 | 532.896 | 96.504 | 18.1 | 815.4600 |
+| 1061 | 107.100 | 550.000 | 241.900 | 415.200 | 406.994 | 8.206 | 2.0 | 69.3400 |
+| 1078 | 94.700 | 440.000 | 196.600 | 338.100 | 329.968 | 8.132 | 2.5 | 68.7200 |
+| 1090 | 157.800 | 570.000 | 261.000 | 466.800 | 452.444 | 14.356 | 3.2 | 121.3100 |
+| 2207 | 218.200 | 5675.000 | 285.200 | 5608.000 | 485.542 | 5122.458 | 1055.0 | 43284.7700 |
+| 2214 | 121.500 | 5575.000 | 238.700 | 5457.800 | 373.860 | 5083.940 | 1359.9 | 42959.2900 |
+| 2231 | 127.600 | 4075.000 | 192.000 | 4010.600 | 333.212 | 3677.388 | 1103.6 | 31073.9300 |
+| 3015 | 149.800 | 710.000 | 313.100 | 546.700 | 536.726 | 9.974 | 1.9 | 84.2800 |
+
+Cheese-only variance cost: **118,770.4300**, not the all-ingredient total.
+
+### Comparison outcome and limits
+
+The five daily totals, all financial fields of the nine invoices, and all eight quantity/financial fields of the ten cheese rows were compared exactly with the independent raw-source Python/Decimal baseline in `tests/test_gold_legacy.py::source_baseline`. No tolerance was required. The extreme cheese variances at stores 2207, 2214, and 2231 are expected legacy defects, not evidence that the reproduction failed. Store 1078's invoice and store 1055's duplicated credit are also intentionally preserved.
+
+This console extract does not establish a full live row-by-row comparison of all reports. Live promo amounts, the other 180 food-cost rows, regional and franchisee values, full lineage, and the input-manifest contents remain unarchived. The local all-ingredient variance total of 123,456.13 and promo total of 20,975.38 must not be presented as supplied Fabric totals. External SliceDW/answer-key reconciliation and approval to begin corrected Gold remain pending.

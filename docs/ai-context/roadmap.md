@@ -26,7 +26,9 @@ First reproduce SliceDW's existing business rules and numbers as closely as poss
 
 **Current status:** on 2026-11-12, the user confirmed `nb_gold_run_legacy` ran successfully after resolving an incorrect lakehouse attachment and fixing native parameter-cell serialization. This confirms user-reported Fabric execution, not an independently inspected comparison of live outputs to the local baseline.
 
-**Next action:** archive the successful batch ID, counts, and totals and compare them with the documented baseline. Deployed SliceDW/external validation comparisons remain pending. Obtain user feedback/confirmation before starting milestone 2: corrected Gold outputs with explicit treatments of legacy defects. No corrected Gold implementation has started.
+**Evidence review:** the user supplied Gold batch `07e7a5f4-2a8a-4884-9b80-58fb1c76c640`, all 18 output counts, five daily totals, nine invoices, and ten cheese-variance rows. These match the documented counts and independently calculated financial/quantity baseline exactly; the supplied results are archived in [`../gold-legacy.md`](../gold-legacy.md). Net sales are 299,572.90 and invoice amount due is 21,061.48. This is not a full live row-by-row reconciliation of every report.
+
+**Next action:** obtain user feedback/confirmation before starting milestone 2: corrected Gold outputs with explicit treatments of legacy defects. No corrected Gold implementation has started. Full input lineage and remaining live report evidence still need archiving for the dossier; deployed SliceDW/external validation comparisons remain pending.
 
 **Gate:** legacy reproduction is compared to SliceDW; corrected outputs document their differences and reconcile to Silver/source totals.
 
