@@ -58,7 +58,7 @@ Verified Bronze row counts from that run:
 ## Azure SQL, dossier, and delivery
 
 - [x] Implement Azure SQL deployment scripts in `sql/` (2026-11-12): `01_schema.sql` (11 corrected Gold mart tables), `02_load_procedures.sql` (staging tables + `gold.usp_LoadCorrectedGold`), `03_validation.sql` (row counts, financial totals, balance and holiday checks), `sql/README.md` (deployment instructions).
-- [ ] Prepare the final dossier covering source lineage, legacy reproduction, corrections, reconciliation, and operational instructions.
+- [x] Prepare the final dossier (`docs/dossier.md`) covering architecture, source lineage (batch IDs), Bronze/Silver counts, legacy defects, corrected results, bridge waterfall, reconciliation summary, Azure SQL deployment, and operational instructions (2026-11-12).
 - [ ] Review all changes for secrets and answer-key content; update the root README and verify `main` contains the required Fabric items.
 - [ ] Open the final PR from `NG/Dev` to `main` after all phases are complete.
 
