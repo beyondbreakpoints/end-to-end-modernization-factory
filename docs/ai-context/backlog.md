@@ -45,7 +45,8 @@ Verified Bronze row counts from that run:
 - [ ] Compare legacy Gold with actual SliceDW/externally provided validation exports; do not claim a deployed SQL Server match from local tests alone.
 - [x] Obtain user approval to start corrected Gold on 2026-11-12; user also approved per-comp pre-tax rounding and deriving Aloha gross from net plus discounts.
 - [x] Implement `nb_gold_corrected` and `nb_gold_run_corrected`, preserving legacy/reference outputs. Document rules and exact local source-based comparisons in `docs/gold-corrected.md`, including the six-month holiday with 1078's unchanged authoritative opening date.
-- [ ] Run corrected Gold in Fabric, archive its batch/count/financial output, and compare with the local baseline.
+- [x] User confirmed corrected Gold `Succeeded 100%` on 2026-11-12. Archive batch `175fdd4c-8417-4a00-b951-f563f4d533fd`, all 11 counts, five daily totals, eight invoices, ten cheese rows, and four attribution counts in `docs/gold-corrected.md`; supplied results match the baseline exactly.
+- [ ] Archive remaining corrected report values and full input-manifest lineage for dossier-level evidence. Live promo and all-ingredient variance totals were not supplied.
 - [ ] Obtain user feedback/confirmation after corrected Gold before starting comparison/bridge outputs.
 - [ ] Reconcile legacy and corrected outputs to source totals and the offline answer key. Do not copy answer-key material into Git or production artifacts.
 - [x] Explicitly retain the ambiguous Aloha app order without a definitive link or incremental revenue in corrected attribution; POS remains the sales system of record. External reconciliation remains pending.

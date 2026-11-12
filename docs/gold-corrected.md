@@ -2,7 +2,7 @@
 
 ## Status and scope
 
-The user approved corrected Gold on 2026-11-12 after reviewing the archived successful legacy run. `nb_gold_corrected` and `nb_gold_run_corrected` implement separate `gold.corrected_*` outputs. Local Spark reports match an independent raw-source Python/Decimal baseline exactly. **Fabric execution remains pending.**
+The user approved corrected Gold on 2026-11-12 after reviewing the archived successful legacy run. `nb_gold_corrected` and `nb_gold_run_corrected` implement separate `gold.corrected_*` outputs. Local Spark reports match an independent raw-source Python/Decimal baseline exactly. **The user confirmed successful Fabric execution on 2026-11-12.** The supplied counts, daily totals, invoices, cheese rows, and attribution counts match the baseline; the evidence and comparison limits are archived below.
 
 Neither notebook writes to Bronze, Silver, `gold.legacy_*`, or `gold.reference_*`. The corrected runner consumes the existing reference snapshots rather than rerunning the reference notebook. The archived legacy batch remains the migration baseline. Comparison/bridge outputs, external answer-key reconciliation, Azure SQL, and the dossier are later milestones.
 
@@ -103,3 +103,85 @@ python -m unittest discover -s tests -p 'test_*.py' -v
 6. Review against the local baseline, archive the live results, then stop for user confirmation before comparison/bridge implementation.
 
 Writes overwrite only the corrected snapshots, using Delta with schema replacement. Multi-table publication is **not transactional**. A failed run can leave mixed corrected batches; do not consume them until the full runner succeeds. Never rewrite batch IDs or weaken consistency guards to pass a run. Concurrent Silver/Gold reruns are unsupported; rerun the corrected runner after resolving the underlying input/context issue.
+
+## Fabric run evidence: 2026-11-12
+
+Provenance: user reported `nb_gold_corrected Succeeded 100%` and supplied the runner's output below. This is user-supplied console evidence, not a direct workspace inspection. Every reported table and every displayed invoice/cheese row has batch `175fdd4c-8417-4a00-b951-f563f4d533fd`. Displayed rules version is `polarslice-corrected-v1`; invoice and cheese periods are 2026-03-09 through 2026-03-13.
+
+### Output counts
+
+| Gold table | Fabric rows |
+|---|---:|
+| `corrected_run_inputs` | 15 |
+| `corrected_promo_cost` | 69 |
+| `corrected_fact_checks` | 9,231 |
+| `corrected_fact_check_lines` | 25,664 |
+| `corrected_online_attribution` | 2,302 |
+| `corrected_daily_sales` | 50 |
+| `corrected_adjustment_decisions` | 5 |
+| `corrected_royalty_invoices` | 8 |
+| `corrected_food_cost_variance` | 190 |
+| `corrected_region_daily_sales` | 85 |
+| `corrected_franchisee_invoices` | 6 |
+
+### Daily net sales
+
+| Business date | Fabric net sales |
+|---|---:|
+| 2026-03-09 | 43308.5800 |
+| 2026-03-10 | 58909.2000 |
+| 2026-03-11 | 44235.1600 |
+| 2026-03-12 | 50299.5700 |
+| 2026-03-13 | 72140.5700 |
+| **Total** | **268893.0800** |
+
+### Royalty invoices
+
+All rows use the reporting period, batch ID, and rules version above. Store 1078 correctly has no invoice.
+
+| Franchisee | Franchisee name | Store | Net sales | Royalty | Ad fund | Adjustments | Amount due |
+|---|---|---:|---:|---:|---:|---:|---:|
+| F001 | Rana Holdings Inc. | 1042 | 34625.6300 | 1731.2800 | 1038.7700 | -150.0000 | 2620.0500 |
+| F001 | Rana Holdings Inc. | 1055 | 31760.6100 | 1588.0300 | 952.8200 | -120.0000 | 2420.8500 |
+| F002 | Kostas Food Group Ltd. | 1043 | 27798.5900 | 1389.9300 | 833.9600 | 0.0000 | 2223.8900 |
+| F003 | Steeltown Slices Inc. | 1061 | 24177.0100 | 1208.8500 | 725.3100 | 0.0000 | 1934.1600 |
+| F005 | Dhillon Family Foods Ltd. | 1090 | 27095.5400 | 1354.7800 | 812.8700 | 25.0000 | 2192.6500 |
+| F006 | Rideau Pizza Partners | 2207 | 29569.6700 | 1478.4800 | 887.0900 | 85.0000 | 2450.5700 |
+| F006 | Rideau Pizza Partners | 2214 | 22776.9000 | 1138.8500 | 683.3100 | 0.0000 | 1822.1600 |
+| F007 | Georgian Bay Eats Inc. | 2231 | 19842.6300 | 992.1300 | 595.2800 | 0.0000 | 1587.4100 |
+
+Summed invoice amount due: **17251.7400**. Store 1055 receives one -120.0000 credit.
+
+### Cheese variance: `MOZ00410`
+
+All rows have base unit KG and use the period, batch ID, and rules version above.
+
+| Store | Opening | Received | Closing | Actual usage | Theoretical usage | Variance | Variance % | Variance cost |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1042 | 203.700 | 710.000 | 331.600 | 582.100 | 562.934 | 19.166 | 3.4 | 161.9500 |
+| 1043 | 166.600 | 580.000 | 273.300 | 473.300 | 455.060 | 18.240 | 4.0 | 154.1300 |
+| 1055 | 256.800 | 730.000 | 357.400 | 629.400 | 532.000 | 97.400 | 18.3 | 823.0300 |
+| 1061 | 107.100 | 550.000 | 241.900 | 415.200 | 400.418 | 14.782 | 3.7 | 124.9100 |
+| 1078 | 94.700 | 440.000 | 196.600 | 338.100 | 327.956 | 10.144 | 3.1 | 85.7200 |
+| 1090 | 157.800 | 570.000 | 261.000 | 466.800 | 451.854 | 14.946 | 3.3 | 126.2900 |
+| 2207 | 218.200 | 567.500 | 285.200 | 500.500 | 486.382 | 14.118 | 2.9 | 119.3000 |
+| 2214 | 121.500 | 557.500 | 238.700 | 440.300 | 375.362 | 64.938 | 17.3 | 548.7300 |
+| 2231 | 127.600 | 407.500 | 192.000 | 343.100 | 332.118 | 10.982 | 3.3 | 92.8000 |
+| 3015 | 149.800 | 710.000 | 313.100 | 546.700 | 536.026 | 10.674 | 2.0 | 90.2000 |
+
+### Online attribution
+
+| Attribution status | Fabric count |
+|---|---:|
+| AMBIGUOUS_ALOHA | 1 |
+| CANCELLED | 34 |
+| MATCHED_ALOHA | 630 |
+| MATCHED_MICROS | 1,637 |
+
+### Comparison outcome and limits
+
+All 11 counts, five daily totals, eight invoice rows (identifiers, names, and all financial fields), ten cheese rows (all eight quantity/financial fields and base unit), and four attribution counts match the independent source-based baseline and documented contracts exactly. No tolerance was required.
+
+The supplied live sales and invoice totals are 268,893.08 and 17,251.74 respectively. Compared with the archived legacy totals, these are decreases of 30,679.82 and 3,809.74; these arithmetic differences are not yet a cause-by-cause reconciliation bridge.
+
+The remaining 180 ingredient rows and the live all-ingredient variance total were not supplied. **4,097.42 food variance cost and 20,219.10 promo discounts remain local baseline totals**, not archived live totals. Full input-manifest contents (including successful Silver/reference IDs), daily store-level values, promotion amounts, adjustment decisions, regional/franchisee values, and row-level attribution remain unarchived. This evidence does not establish a full live row-by-row or external SliceDW/answer-key reconciliation. Obtain user confirmation before starting comparison/bridge implementation.

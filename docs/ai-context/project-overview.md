@@ -31,7 +31,7 @@ The intended work order is:
 
 ## Current state
 
-Bronze and Silver were successfully run by the user in Fabric. On 2026-11-12 the user confirmed Gold milestone 1 succeeded and supplied counts, daily totals, invoices, and cheese rows matching the independent local baseline; the evidence is archived in `docs/gold-legacy.md`. The user then approved corrected Gold and its per-comp Aloha rounding policy. Milestone 2 is implemented on `NG/Dev` with exact local comparisons; its Fabric run is pending (see `docs/gold-corrected.md`). Stop for feedback after that run before comparison/bridge work. External reconciliation, Azure SQL, and the dossier remain ahead. Treat workspace execution status as user-reported, not independently inspected.
+Bronze and Silver were successfully run by the user in Fabric. On 2026-11-12 the user confirmed Gold milestone 1 succeeded and supplied counts, daily totals, invoices, and cheese rows matching the independent local baseline; the evidence is archived in `docs/gold-legacy.md`. The user then approved corrected Gold and its per-comp Aloha rounding policy. Milestone 2 also succeeded in Fabric, with supplied counts, daily totals, invoices, cheese rows, and attribution counts matching exactly (see `docs/gold-corrected.md`). Stop for user confirmation before comparison/bridge work. Full live report capture, external reconciliation, Azure SQL, and the dossier remain ahead. Treat workspace execution status as user-reported, not independently inspected.
 
 ## Success criteria
 

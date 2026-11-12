@@ -9,7 +9,7 @@ Polar Slice Pizza legacy-to-Fabric modernization (fictional data).
 | `sql/` | Reserved for Azure SQL scripts (step 5). |
 | `docs/` | Instructions, starting with [uploading source files to OneLake](docs/onelake-upload.md). |
 
-Steps: 1 Bronze, 2 Silver, and 3 Gold legacy milestone successfully run in Fabric; corrected Gold is implemented with its Fabric run pending. 4 Reconciliation and 5 Azure SQL / dossier remain ahead.
+Steps: 1 Bronze, 2 Silver, and 3 Gold legacy/corrected milestones successfully run in Fabric, with supplied Gold outputs matching the local baselines. Comparison/bridge, 4 external reconciliation, and 5 Azure SQL / dossier remain ahead.
 
 For Gold milestone 1, sync `NG/Dev` and run `nb_gold_run_legacy` after Silver. See [legacy Gold contracts, execution steps, and baseline evidence](docs/gold-legacy.md).
 

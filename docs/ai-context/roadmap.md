@@ -18,7 +18,7 @@ Create typed, standardized Delta tables in `silver`. Handle each source's date, 
 
 **Carry-forward notes:** the matching assertions require 1,637 unique MICROS links, 630 unique Aloha links, and one retained ambiguous Aloha match. The ambiguity remains an explicit Gold/reconciliation task, not a notebook failure. Archive the successful run's count/quality output and run identifier for the dossier; these were not included in the user's status report.
 
-## 3. Gold — legacy verified; corrected milestone implemented
+## 3. Gold — legacy and corrected milestones successfully executed in Fabric
 
 First reproduce SliceDW's existing business rules and numbers as closely as possible from the legacy SQL and SSIS artifacts. Only after establishing that baseline, implement corrected marts and identify each rule that changes a result.
 
@@ -30,7 +30,9 @@ First reproduce SliceDW's existing business rules and numbers as closely as poss
 
 **Milestone 2:** approved by the user on 2026-11-12 and implemented in `nb_gold_corrected` and `nb_gold_run_corrected`. Corrected POS-led marts remove gift/void/duplicate sales, use Aloha DOB and tax-exclusive values, retain app links only for attribution, apply the contractual holiday and single credit, and use signed base-unit receipts and corrected SKU recipes. The user approved per-comp cent rounding, with Aloha gross derived from net plus discounts. Local comparisons match the independent raw-source Decimal baseline exactly: net sales 268,893.08, invoices 17,251.74, food variance cost 4,097.42. See [`../gold-corrected.md`](../gold-corrected.md).
 
-**Next action:** sync and run `nb_gold_run_corrected` in Fabric, archive its output, and compare with the local baseline. Stop for user feedback/confirmation before implementing the legacy-to-corrected comparison/bridge. Full input lineage and remaining legacy live report evidence still need archiving for the dossier; deployed SliceDW/external validation comparisons remain pending.
+**Corrected Fabric evidence:** on 2026-11-12 the user reported `nb_gold_corrected Succeeded 100%` and supplied batch `175fdd4c-8417-4a00-b951-f563f4d533fd`. All 11 counts, five daily totals, eight invoice rows, ten cheese rows, and four attribution counts match the local baseline exactly and are archived in [`../gold-corrected.md`](../gold-corrected.md). Live net sales total 268,893.08 and invoices total 17,251.74. The all-ingredient variance and promo totals above remain local-only; their live values were not supplied.
+
+**Next action:** obtain user feedback/confirmation before implementing the legacy-to-corrected comparison/bridge with attributable, balancing rule changes. Full input lineage and remaining live report evidence still need archiving for the dossier; deployed SliceDW/external validation comparisons remain pending.
 
 **Gate:** legacy reproduction is compared to SliceDW; corrected outputs document their differences and reconcile to Silver/source totals.
 
