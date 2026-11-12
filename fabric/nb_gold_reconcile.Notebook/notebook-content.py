@@ -310,7 +310,7 @@ save(spark.sql(f"""
            COALESCE(d.net_sales, 0) AS corrected_daily_net_sales,
            COALESCE(m.micros_net_sales, 0) + COALESCE(a.aloha_net_sales, 0) - COALESCE(d.net_sales, 0) AS residual
     FROM (
-        SELECT store_id, business_date, SUM(subtotal - discount) AS micros_net_sales
+        SELECT store_id, business_date, SUM(net_sales) AS micros_net_sales
         FROM gr_micros_silver_sales GROUP BY store_id, business_date
     ) m
     FULL OUTER JOIN (
