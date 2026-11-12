@@ -134,58 +134,44 @@ spark.sql(f"""
 # CELL ********************
 
 # --- Aloha bridge ---
-# Legacy uses to_date(close_ts) as business date; check_id = "YYYYMMDD-CHECKID"
-# Corrected uses DOB as business date; check_id = numeric CHECKID string
-# Join via Silver on (store_id, DOB, CHECKID) to reconcile the two date schemes
+# Legacy check_id = "YYYYMMDD-CHECKID" where YYYYMMDD is DOB, CHECKID is str(integer).
+# Corrected check_id = str(integer), business_date = DOB.
+# Join Gold tables directly on (store_id, DOB, CHECKID) — no Silver intermediary,
+# so no checks can be dropped by a failed intermediary join.
 
 spark.sql(f"""
-    SELECT l.store_id,
-           s.business_date AS dob,
-           CAST(s.check_id AS STRING) AS numeric_check_id,
-           l.business_date AS legacy_close_date,
-           s.business_date AS corrected_dob,
-           l.net_sales AS legacy_net_sales,
-           s.net_sales_excl_tax AS silver_net_sales_excl_tax,
-           s.net_total_tax_incl AS silver_net_total_tax_incl
-    FROM gold.legacy_fact_checks l
-    JOIN gb_sa s
-      ON s.store_id = l.store_id
-     AND CAST(s.check_id AS STRING) = regexp_extract(l.check_id, '-([0-9]+)$', 1)
-     AND s.business_date = to_date(regexp_extract(l.check_id, '^([0-9]{{8}})', 1), 'yyyyMMdd')
-    WHERE l.source_system = 'ALOHA'
-      AND l.business_date BETWEEN DATE '{period_start}' AND DATE '{period_end}'
-""").createOrReplaceTempView("gb_aloha_legacy_keyed")
-
-spark.sql(f"""
-    SELECT store_id, business_date AS dob, check_id AS numeric_check_id,
-           net_sales AS corrected_net_sales
-    FROM gold.corrected_fact_checks
-    WHERE source_system = 'ALOHA'
-      AND business_date BETWEEN DATE '{period_start}' AND DATE '{period_end}'
-""").createOrReplaceTempView("gb_aloha_corrected")
-
-# Full outer join on (store_id, DOB, numeric_check_id)
-spark.sql("""
     SELECT COALESCE(l.store_id, c.store_id) AS store_id,
-           COALESCE(l.dob, c.dob) AS business_date,
-           COALESCE(l.numeric_check_id, c.numeric_check_id) AS check_id,
+           COALESCE(to_date(substr(l.check_id, 1, 8), 'yyyyMMdd'), c.business_date) AS business_date,
+           COALESCE(substr(l.check_id, 10), c.check_id) AS check_id,
            COALESCE(l.legacy_net_sales, 0) AS legacy_net_sales,
            COALESCE(c.corrected_net_sales, 0) AS corrected_net_sales,
            COALESCE(c.corrected_net_sales, 0) - COALESCE(l.legacy_net_sales, 0) AS net_sales_delta,
            CASE
-               WHEN l.numeric_check_id IS NOT NULL AND c.numeric_check_id IS NOT NULL
-                    AND l.legacy_close_date <> l.corrected_dob THEN 'ALOHA_DATE_SHIFT'
-               WHEN l.numeric_check_id IS NOT NULL AND c.numeric_check_id IS NOT NULL THEN 'BOTH'
-               WHEN c.numeric_check_id IS NULL THEN 'ALOHA_DOB_OUTSIDE_PERIOD'
-               ELSE 'ALOHA_DOB_IN_PERIOD_CLOSE_OUTSIDE'
+               WHEN l.check_id IS NOT NULL AND c.check_id IS NOT NULL
+                    AND l.legacy_close_date <> to_date(substr(l.check_id, 1, 8), 'yyyyMMdd')
+                    THEN 'ALOHA_DATE_SHIFT'
+               WHEN l.check_id IS NOT NULL AND c.check_id IS NOT NULL THEN 'BOTH'
+               WHEN c.check_id IS NULL THEN 'ALOHA_DOB_OUTSIDE_PERIOD'
+               ELSE 'ALOHA_CLOSE_OUTSIDE_PERIOD'
            END AS exclusion_reason,
            l.legacy_close_date,
-           l.silver_net_total_tax_incl,
-           l.silver_net_sales_excl_tax,
            'ALOHA' AS source_system
-    FROM gb_aloha_legacy_keyed l
-    FULL OUTER JOIN gb_aloha_corrected c
-      ON l.store_id = c.store_id AND l.dob = c.dob AND l.numeric_check_id = c.numeric_check_id
+    FROM (
+        SELECT store_id, check_id, net_sales AS legacy_net_sales,
+               business_date AS legacy_close_date
+        FROM gold.legacy_fact_checks
+        WHERE source_system = 'ALOHA'
+          AND business_date BETWEEN DATE '{period_start}' AND DATE '{period_end}'
+    ) l
+    FULL OUTER JOIN (
+        SELECT store_id, check_id, net_sales AS corrected_net_sales, business_date
+        FROM gold.corrected_fact_checks
+        WHERE source_system = 'ALOHA'
+          AND business_date BETWEEN DATE '{period_start}' AND DATE '{period_end}'
+    ) c
+    ON  l.store_id = c.store_id
+    AND substr(l.check_id, 1, 8) = date_format(c.business_date, 'yyyyMMdd')
+    AND substr(l.check_id, 10) = c.check_id
 """).createOrReplaceTempView("gb_aloha_bridge")
 
 # METADATA ********************
@@ -338,8 +324,18 @@ EXPECTED_DELTA               = EXPECTED_NET_SALES_CORRECTED - EXPECTED_NET_SALES
 bridge_check_delta = spark.sql("SELECT SUM(net_sales_delta) AS d FROM gb_comparison_bridge").collect()[0][0] or 0
 app_delta          = spark.sql("SELECT SUM(net_sales_delta) AS d FROM gb_app_bridge").collect()[0][0] or 0
 total_bridge_delta = float(bridge_check_delta) + float(app_delta)
-print(f"Bridge delta (checks): {bridge_check_delta:,.2f}")
-print(f"Bridge delta (app):    {app_delta:,.2f}")
+
+# Per-system diagnostics — compare bridge totals to Gold table totals to pinpoint any gap
+for sys in ("MICROS", "ALOHA"):
+    gl = spark.sql(f"SELECT SUM(net_sales) FROM gold.legacy_fact_checks WHERE source_system='{sys}'").collect()[0][0] or 0
+    gc = spark.sql(f"SELECT SUM(net_sales) FROM gold.corrected_fact_checks WHERE source_system='{sys}'").collect()[0][0] or 0
+    bl = spark.sql(f"SELECT SUM(legacy_net_sales) FROM gb_comparison_bridge WHERE source_system='{sys}'").collect()[0][0] or 0
+    bc = spark.sql(f"SELECT SUM(corrected_net_sales) FROM gb_comparison_bridge WHERE source_system='{sys}'").collect()[0][0] or 0
+    print(f"{sys}: gold_legacy={float(gl):,.2f}  bridge_legacy={float(bl):,.2f}  miss_legacy={float(gl)-float(bl):,.2f}")
+    print(f"{sys}: gold_corrected={float(gc):,.2f}  bridge_corrected={float(bc):,.2f}  miss_corrected={float(gc)-float(bc):,.2f}")
+
+print(f"\nBridge delta (checks): {float(bridge_check_delta):,.2f}")
+print(f"Bridge delta (app):    {float(app_delta):,.2f}")
 print(f"Bridge delta total:    {total_bridge_delta:,.2f}")
 print(f"Expected delta:        {EXPECTED_DELTA:,.2f}")
 
