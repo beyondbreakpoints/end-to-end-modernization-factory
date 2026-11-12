@@ -49,7 +49,7 @@ Verified Bronze row counts from that run:
 - [x] Archive remaining corrected report values for dossier. Promo total **$20,219.10** and all-ingredient food variance cost **$4,097.42** confirmed as live Fabric values: runner passed all embedded discount-reconciliation and food-cost-balance assertions with matching row counts. Archived in `docs/gold-corrected.md`.
 - [x] Obtain user feedback/confirmation after corrected Gold; user triggered planning session on 2026-11-12 — proceeding with comparison/bridge.
 - [x] Implement `nb_gold_comparison` and `nb_gold_run_comparison`; produces `gold.comparison_bridge`, `gold.comparison_summary`, `gold.comparison_daily`, `gold.comparison_invoices`. Verifies bridge nets to $30,679.82 net-sales delta and $3,809.74 invoice delta.
-- [ ] Sync comparison notebooks to Fabric from `NG/Dev`, run `nb_gold_run_comparison`, archive batch ID and summary in `docs/gold-comparison.md`.
+- [x] Synced to Fabric and ran `nb_gold_run_comparison` on 2026-11-12. Batch `ff7553d1-0cde-409b-9caf-06cebecfb179` succeeded. Full waterfall, daily, and invoice comparison archived in `docs/gold-comparison.md`. Bridge nets exactly to −$30,679.82 and −$3,809.74.
 - [ ] Reconcile legacy and corrected outputs to source totals and the offline answer key. Do not copy answer-key material into Git or production artifacts.
 - [x] Explicitly retain the ambiguous Aloha app order without a definitive link or incremental revenue in corrected attribution; POS remains the sales system of record. External reconciliation remains pending.
 
