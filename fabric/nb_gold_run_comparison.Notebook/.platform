@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_gold_run_comparison",
+    "description": "Runs the legacy-to-corrected comparison bridge without touching prior milestone outputs"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d7a4f219-3c85-4e1b-b6f8-0a1e5c2d9f83"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "lh_polarslice",
+    "description": "Polar Slice Pizza medallion lakehouse (bronze/silver/gold schemas)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f8d5782d-d817-44fe-a071-613af0122930"
+  }
+}

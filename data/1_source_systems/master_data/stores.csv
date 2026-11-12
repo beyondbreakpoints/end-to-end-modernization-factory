@@ -1,0 +1,11 @@
+store_id,store_name,city,province,ownership,franchisee_id,franchisee_name,pos_system,open_date
+1042,Queen St West,Toronto,ON,FRANCHISE,F001,Rana Holdings Inc.,MICROS,2014-05-12
+1043,Danforth,Toronto,ON,FRANCHISE,F002,Kostas Food Group Ltd.,MICROS,2016-09-01
+1055,Square One,Mississauga,ON,FRANCHISE,F001,Rana Holdings Inc.,MICROS,2017-03-20
+1061,James St North,Hamilton,ON,FRANCHISE,F003,Steeltown Slices Inc.,MICROS,2018-11-05
+1078,Kerr Village,Oakville,ON,FRANCHISE,F004,Lakeshore QSR Corp.,MICROS,2025-12-01
+1090,Bramalea,Brampton,ON,FRANCHISE,F005,Dhillon Family Foods Ltd.,MICROS,2019-06-17
+3015,Yonge & Eglinton,Toronto,ON,CORPORATE,,,MICROS,2012-02-01
+2207,Bank St,Ottawa,ON,FRANCHISE,F006,Rideau Pizza Partners,ALOHA,2015-08-10
+2214,Princess St,Kingston,ON,FRANCHISE,F006,Rideau Pizza Partners,ALOHA,2018-04-23
+2231,Bayfield,Barrie,ON,FRANCHISE,F007,Georgian Bay Eats Inc.,ALOHA,2020-10-02

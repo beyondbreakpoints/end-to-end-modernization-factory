@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_bronze_as400_commissary",
+    "description": "Bronze load: AS/400 fixed-width item master, shipments, stock counts"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "73a3e502-6e6c-4b91-b99d-87c709a71fca"
+  }
+}

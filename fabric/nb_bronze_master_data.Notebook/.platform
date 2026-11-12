@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_bronze_master_data",
+    "description": "Bronze load: head office master data CSVs"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "1b5a8452-019e-4115-a349-bc394cdd1b6a"
+  }
+}

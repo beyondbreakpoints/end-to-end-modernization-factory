@@ -1,0 +1,9 @@
+# Answer key must never be committed or loaded into the pipeline
+3_answer_key/
+**/3_answer_key/**
+polar_slice_data_pack/
+
+# Local noise
+.ipynb_checkpoints/
+__pycache__/
+*.pyc

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_bronze_online_app",
+    "description": "Bronze load: online app orders (JSON) and customers (CSV)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "232f5b5c-d730-4693-b5fd-01bed18df446"
+  }
+}

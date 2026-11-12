@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_gold_run_corrected",
+    "description": "Runs corrected Gold without replacing legacy or reference outputs"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "297db999-0cfb-487a-b8af-c4b7f71052ed"
+  }
+}

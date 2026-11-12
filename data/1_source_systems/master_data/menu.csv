@@ -1,0 +1,20 @@
+sku,item_name,category,size,price_excl_tax,micros_item_no
+PZ-PEP-S,Small Pepperoni 10in,PIZZA,S,9.49,1101
+PZ-PEP-M,Medium Pepperoni 12in,PIZZA,M,11.99,1102
+PZ-PEP-L,Large Pepperoni 14in,PIZZA,L,13.99,1103
+PZ-MAR-M,Medium Margherita 12in,PIZZA,M,11.49,1112
+PZ-MAR-L,Large Margherita 14in,PIZZA,L,13.49,1113
+PZ-HAW-M,Medium Hawaiian 12in,PIZZA,M,12.49,1122
+PZ-HAW-L,Large Hawaiian 14in,PIZZA,L,14.49,1123
+PZ-VEG-M,Medium Veggie 12in,PIZZA,M,12.99,1132
+PZ-VEG-L,Large Veggie 14in,PIZZA,L,14.99,1133
+PZ-MTL-M,Medium Meat Lovers 12in,PIZZA,M,13.99,1142
+PZ-MTL-L,Large Meat Lovers 14in,PIZZA,L,16.49,1143
+PZ-BBQ-L,Large BBQ Chicken 14in,PIZZA,L,15.99,1153
+SD-GARLIC,Garlic Bread,SIDE,,5.99,2001
+SD-WING10,Chicken Wings 10pc,SIDE,,12.99,2010
+SD-CAESAR,Caesar Salad,SIDE,,7.49,2020
+SD-DIP,Garlic Dip,SIDE,,0.99,2030
+DS-CINN,Cinnamon Bites,DESSERT,,5.49,3001
+BV-POP2L,Pop 2L,DRINK,,3.99,4001
+BV-POPCAN,Pop Can 355ml,DRINK,,1.79,4002

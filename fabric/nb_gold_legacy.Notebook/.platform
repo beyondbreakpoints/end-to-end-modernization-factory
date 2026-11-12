@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_gold_legacy",
+    "description": "Reproduces SliceDW legacy facts and reports without applying business corrections"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "65f8d7c8-1b4d-4162-a605-55a4a1b9a379"
+  }
+}

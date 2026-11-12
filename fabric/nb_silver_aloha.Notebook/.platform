@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_aloha",
+    "description": "Types Aloha checks and items, parsing business dates and tax-inclusive values"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "cc0bdbd8-e378-451f-960a-136b182e9c16"
+  }
+}
