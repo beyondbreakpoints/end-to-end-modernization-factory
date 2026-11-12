@@ -25,7 +25,7 @@
 # # Silver: MICROS
 # Casts check headers and lines, maps known item numbers, and marks anomalies without removing records.
 
-# CELL ********************
+# PARAMETERS CELL ********************
 
 batch_id = ""
 

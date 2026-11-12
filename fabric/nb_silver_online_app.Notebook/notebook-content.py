@@ -25,7 +25,7 @@
 # Parses order/customer data, preserves cancellations and possible duplicate accounts, and links completed orders to POS records.
 # MICROS links use `online_ref`; Aloha candidates require the same store/business date, total within one cent, and opening time within two minutes.
 
-# CELL ********************
+# PARAMETERS CELL ********************
 
 batch_id = ""
 

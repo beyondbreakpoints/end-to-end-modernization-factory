@@ -18,6 +18,8 @@ Local PySpark execution passed against the committed source pack. Every keyed re
 4. Run all cells. The runner invokes the reference notebook and then the legacy notebook with `useRootDefaultLakehouse: True`. It prints each output count, daily totals, invoices, and cheese variance.
 5. Capture the Gold batch ID, notebook statuses, counts, and report output. Review them before approving the next milestone.
 
+If Gold reports mixed Silver batches, inspect the Silver runner's batch validation output. Each Silver output must contain exactly the ID printed by that runner. Silver and Gold parameter cells must be recognized by Fabric as parameter cells (`# PARAMETERS CELL ********************` in the Git source); ordinary cells with parameter tags do not provide the native source marker. After syncing this fix, rerun Silver before Gold. Do not relabel existing batches or remove the consistency guard.
+
 No new file upload is required. Reference snapshots are embedded in the reference notebook so they travel through Fabric Git; their authoritative source is `data/2_legacy_warehouse_slicedw/sql/03_reference_data.sql`. The adjustment records are also present in `ManualAdjustments_March2026.csv`.
 
 Writes use Delta overwrite with schema replacement. Reruns replace this milestone's output snapshot, **not individual historical partitions**. A custom period must have its boundaries in the Silver calendar. `legacy_shipments`, `legacy_stock_counts`, and item dimensions contain the full input extracts, as `usp_LoadCommissary` does; period filters are applied in the reports. The default-period row-count assertions are specific to this source pack.

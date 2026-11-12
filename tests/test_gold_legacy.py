@@ -248,7 +248,7 @@ class GoldLegacyTests(unittest.TestCase):
         for cell in notebook_cells(name):
             # Exercise real Spark SQL, validations, and table writes without requiring Fabric Delta jars.
             exec(compile(cell.replace('format("delta")', 'format("parquet")'), name, "exec"), namespace)
-            if '"parameters"' in cell:
+            if cell.startswith("# PARAMETERS CELL "):
                 namespace.update({"batch_id": "gold-fixture", **(parameters or {})})
         return namespace
 

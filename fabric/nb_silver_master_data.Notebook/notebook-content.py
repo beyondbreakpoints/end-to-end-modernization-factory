@@ -24,7 +24,7 @@
 # # Silver: master data
 # Types head-office reference data and validates its natural keys. Raw inputs remain available in Bronze.
 
-# CELL ********************
+# PARAMETERS CELL ********************
 
 batch_id = ""
 

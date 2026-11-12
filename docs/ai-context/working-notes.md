@@ -15,7 +15,8 @@ This file retains project-operating details from the prior session that do not b
 - The answer key is for checking only. It must remain outside the public repository, commits, notebooks, and pipeline.
 - A previous worktree/branch name and past PR numbers in the handoff are historical references, not instructions to reuse them.
 - Guide Fabric UI operations one step at a time when user interaction is needed.
-- Write notebook `# META` blocks in Fabric's canonical multi-line, 2-space-indented JSON (as Fabric exports it). Gold notebooks first committed with compact one-line META JSON failed in Fabric with "No default context found, please attach a lakehouse" in `nb_gold_reference_data`; normalizing the format to match the working Silver notebooks was the fix. If it recurs, open the runner in Fabric, attach `lh_polarslice` as its default lakehouse, and rerun.
+- Keep notebook `# META` blocks in Fabric's canonical multi-line, 2-space-indented JSON. The earlier claim that formatting fixed "No default context found" was unverified; the user subsequently identified an incorrect lakehouse item. Verify the actual lakehouse identity, not just its display name, and its default attachment.
+- Fabric Python-source parameter cells use `# PARAMETERS CELL ********************`, not ordinary `# CELL` blocks with a `parameters` tag. Silver and Gold now use the native marker. The Silver runner validates every output against its own batch ID; Gold retains its cross-table consistency guard. A reported successful Silver run previously wrote five source-specific UUIDs instead of the runner UUID, exposing the missing parameter propagation.
 
 ## Handoff uncertainty
 

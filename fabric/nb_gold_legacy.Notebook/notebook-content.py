@@ -25,7 +25,7 @@
 # Mirrors `02_programmability.sql` and `03_reference_data.sql`. Known legacy defects are intentional.
 # Outputs replace the selected period snapshot, not historical partitions. Run after Silver and `nb_gold_reference_data`.
 
-# CELL ********************
+# PARAMETERS CELL ********************
 
 batch_id = ""
 period_start = "2026-03-09"
@@ -92,7 +92,8 @@ for alias, table in inputs.items():
         reference_batches.add(batches[0][0])
     manifest.append((table, batches[0][0], df.count(), period_start, period_end))
     df.createOrReplaceTempView(f"gl_{alias}")
-assert len(silver_batches) == 1, "Silver inputs must come from one successful runner batch"
+assert len(silver_batches) == 1, \
+    f"Silver inputs must come from one successful runner batch: {[(r[0], r[1]) for r in manifest if r[0].startswith('silver.')]}"
 assert len(reference_batches) == 1, "Gold references must come from one successful reference batch"
 calendar_dates = {r.business_date for r in spark.table("silver.calendar").collect()}
 assert start in calendar_dates and end in calendar_dates, "Period boundaries must exist in Silver calendar"

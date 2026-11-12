@@ -1,4 +1,5 @@
 import csv
+import re
 from contextlib import redirect_stdout
 from io import StringIO
 from pathlib import Path
@@ -15,7 +16,7 @@ SOURCE = ROOT / "data" / "1_source_systems"
 
 def notebook_cells(name):
     source = (ROOT / "fabric" / f"{name}.Notebook" / "notebook-content.py").read_text()
-    return source.split("# CELL ********************")[1:]
+    return re.split(r"(?=^# (?:PARAMETERS )?CELL \*{20}$)", source, flags=re.M)[1:]
 
 
 def run_notebook(name, spark, tables, parameters=None):
@@ -33,11 +34,41 @@ def run_notebook(name, spark, tables, parameters=None):
 
     for cell in notebook_cells(name):
         exec(compile(cell, name, "exec"), namespace)
-        if '"tags":' in cell and '"parameters"' in cell:
+        if cell.startswith("# PARAMETERS CELL "):
             namespace.update(parameters or {})
         if "def save(" in cell:
             namespace["save"] = save
     return namespace
+
+
+class SilverRunnerTests(unittest.TestCase):
+    def test_runner_rejects_missing_or_different_output_batches(self):
+        validation = notebook_cells("nb_silver_run_all")[-2]
+        for batches in (["runner-batch"], ["child-batch"], [], [None],
+                        ["runner-batch", "child-batch"]):
+            with self.subTest(batches=batches), redirect_stdout(StringIO()):
+                frame = SimpleNamespace(
+                    select=lambda _: SimpleNamespace(distinct=lambda: SimpleNamespace(
+                        collect=lambda: [(batch,) for batch in batches])))
+                namespace = {"batch_id": "runner-batch",
+                             "spark": SimpleNamespace(table=lambda _: frame)}
+                if batches == ["runner-batch"]:
+                    exec(compile(validation, "silver-runner", "exec"), namespace)
+                else:
+                    with self.assertRaisesRegex(AssertionError, "not written to all outputs"):
+                        exec(compile(validation, "silver-runner", "exec"), namespace)
+
+    def test_silver_and_gold_parameters_use_native_fabric_cells(self):
+        names = ["nb_silver_master_data", "nb_silver_micros", "nb_silver_aloha",
+                 "nb_silver_as400_commissary", "nb_silver_online_app",
+                 "nb_gold_reference_data", "nb_gold_legacy", "nb_gold_run_legacy"]
+        for name in names:
+            with self.subTest(notebook=name):
+                cells = notebook_cells(name)
+                self.assertTrue(cells[0].startswith("# PARAMETERS CELL "))
+                namespace = {}
+                exec(compile(cells[0], name, "exec"), namespace)
+                self.assertIn("batch_id", namespace)
 
 
 class SilverMenuMappingTests(unittest.TestCase):
@@ -73,8 +104,10 @@ class SilverMenuMappingTests(unittest.TestCase):
         menu = self.tables["silver.menu"]
         self.assertEqual(menu.count(), 19)
         self.assertEqual(menu.select("price_excl_tax").distinct().count(), 17)
-        run_notebook("nb_silver_aloha", self.spark, self.tables)
+        run_notebook("nb_silver_aloha", self.spark, self.tables, {"batch_id": "runner-fixture"})
         lines = self.tables["silver.aloha_check_lines"]
+        self.assertEqual([r[0] for r in lines.select("_silver_batch_id").distinct().collect()],
+                         ["runner-fixture"])
         self.assertEqual(lines.count(), self.tables["bronze.aloha_items"].count())
         self.assertEqual(lines.count(), 7341)
         mappings = {

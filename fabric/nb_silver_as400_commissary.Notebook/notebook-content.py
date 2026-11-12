@@ -25,7 +25,7 @@
 # # Silver: AS/400 commissary
 # Decodes CYYMMDD dates and implied decimals, applies trailing credit signs, and normalizes shipment quantities to item base units.
 
-# CELL ********************
+# PARAMETERS CELL ********************
 
 batch_id = ""
 

@@ -25,7 +25,7 @@
 # Versioned snapshots of SliceDW configuration and finance adjustments, copied from `03_reference_data.sql`.
 # Embedded inputs travel with Fabric Git; no additional OneLake upload is required. Legacy mapping defects and both adjustment copies are intentional.
 
-# CELL ********************
+# PARAMETERS CELL ********************
 
 batch_id = ""
 

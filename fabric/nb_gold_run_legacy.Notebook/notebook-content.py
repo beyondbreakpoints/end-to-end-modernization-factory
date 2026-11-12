@@ -24,7 +24,7 @@
 # # Gold: run legacy milestone
 # Run after a successful Silver runner batch. This runner does not execute corrected Gold or answer-key reconciliation.
 
-# CELL ********************
+# PARAMETERS CELL ********************
 
 batch_id = ""
 period_start = "2026-03-09"
