@@ -150,8 +150,8 @@ spark.sql(f"""
     FROM gold.legacy_fact_checks l
     JOIN gb_sa s
       ON s.store_id = l.store_id
-     AND to_date(s.close_ts) = l.business_date
-     AND concat(date_format(l.business_date, 'yyyyMMdd'), '-', CAST(s.check_id AS STRING)) = l.check_id
+     AND CAST(s.check_id AS STRING) = regexp_extract(l.check_id, '-([0-9]+)$', 1)
+     AND s.business_date = to_date(regexp_extract(l.check_id, '^([0-9]{{8}})', 1), 'yyyyMMdd')
     WHERE l.source_system = 'ALOHA'
       AND l.business_date BETWEEN DATE '{period_start}' AND DATE '{period_end}'
 """).createOrReplaceTempView("gb_aloha_legacy_keyed")
