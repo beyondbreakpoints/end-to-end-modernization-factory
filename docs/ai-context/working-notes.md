@@ -27,7 +27,7 @@ The previous conversation mentioned “item 3” and later asked for step-by-ste
 - Five source-specific Silver notebooks and `nb_silver_run_all` are now in `fabric/`; run the orchestrator only after Bronze is available.
 - The Silver runner calls master data, MICROS, Aloha, AS/400, then online app so its lookup and POS-matching dependencies exist.
 - Silver flags and retains anomalous rows; Gold must explicitly decide business inclusion. `_batch_id` remains Bronze provenance, while `_silver_batch_id` identifies the transformation run.
-- Local Python syntax and Fabric metadata were checked; live Spark/Fabric execution and output assertions remain pending.
+- Local Python syntax and Fabric metadata were checked. The user subsequently reported successful Silver execution; see the dated backlog and roadmap status.
 
 ## Silver menu-mapping fix
 
@@ -42,7 +42,7 @@ The previous conversation mentioned “item 3” and later asked for step-by-ste
 - User reported all Silver notebooks `Succeeded` in Fabric on 2026-11-11, then approved reference inputs plus legacy Gold only and requested a stop for feedback before corrected Gold.
 - `nb_gold_run_legacy` invokes `nb_gold_reference_data` and `nb_gold_legacy` after Silver. No extra uploads are needed; embedded references are versioned snapshots of SliceDW's `03_reference_data.sql`.
 - Legacy defects are preserved intentionally. Local independent source-based comparisons match every report metric, including 190 food-cost rows with no rounding tolerance. Period legacy net sales are $299,572.90 and invoice amount due is $21,061.48; these are incorrect business results retained as the migration baseline.
-- Local tests use Parquet writes in place of Fabric Delta writes. Fabric execution, run-output capture, and deployed SliceDW/external export comparisons remain pending. Details and instructions are in `docs/gold-legacy.md`.
+- Local tests use Parquet writes in place of Fabric Delta writes. On 2026-11-12 the user confirmed `nb_gold_run_legacy` ran successfully in Fabric after fixing the lakehouse attachment and parameter propagation. The successful batch ID and report outputs have not been supplied; run-output capture and deployed SliceDW/external export comparisons remain pending. The earlier failed Silver runner ID is not evidence of the final successful run. Details and instructions are in `docs/gold-legacy.md`.
 - Do not proceed to corrected Gold before user feedback/confirmation. The one ambiguous Silver Aloha match remains a corrected/reconciliation task.
 
 ## Provenance

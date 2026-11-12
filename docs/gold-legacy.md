@@ -8,7 +8,7 @@ This milestone reproduces SliceDW's March 9-13, 2026 facts and reports **without
 - `nb_gold_legacy`: writes the legacy facts, reports, and input manifest.
 - `nb_gold_run_legacy`: executes those two notebooks in order with one Gold batch ID.
 
-Local PySpark execution passed against the committed source pack. Every keyed report row was compared to an independent Python/Decimal calculation of the legacy SQL rules. This is not yet a live Fabric run or a comparison against deployed SQL Server/answer-key exports. Corrected Gold and formal reconciliation are not implemented in this milestone.
+Local PySpark execution passed against the committed source pack. Every keyed report row was compared to an independent Python/Decimal calculation of the legacy SQL rules. On 2026-11-12 the user confirmed `nb_gold_run_legacy` ran successfully in Fabric after resolving the lakehouse attachment and native parameter-cell markers. The successful run's batch ID, counts, and totals have not yet been supplied for comparison with the local baseline. This is not a comparison against deployed SQL Server/answer-key exports. Corrected Gold and formal reconciliation are not implemented in this milestone.
 
 ## Fabric execution
 

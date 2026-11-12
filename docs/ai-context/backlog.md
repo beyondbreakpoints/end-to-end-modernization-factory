@@ -1,6 +1,6 @@
 # Backlog
 
-Status reflects repository work on `NG/Dev` and the user's 2026-11-11 report that Fabric execution completed with all Silver notebooks marked `Succeeded`. Live execution was confirmed by the user, not independently inspected in this session.
+Status reflects repository work on `NG/Dev`, the user's successful Silver execution report, and their 2026-11-12 confirmation that `nb_gold_run_legacy` ran successfully. Live execution was confirmed by the user, not independently inspected in this session.
 
 ## Completed
 
@@ -38,7 +38,9 @@ Verified Bronze row counts from that run:
 - [x] Read and document the legacy SQL/SSIS dependencies and business rules in `docs/gold-legacy.md`.
 - [x] Implement versioned royalty, hierarchy, legacy Aloha map, and manual-adjustment inputs, preserving both duplicate-credit rows.
 - [x] Implement `nb_gold_legacy` and `nb_gold_run_legacy`; locally compare every report metric to an independent raw-source/Decimal baseline and verify idempotent reruns.
-- [ ] Sync `NG/Dev`, run `nb_gold_run_legacy` in Fabric, and capture statuses, batch ID, counts, and output totals. Local Spark tests do not exercise Fabric Delta writes/orchestration.
+- [x] Resolve the incorrect default lakehouse attachment and missing native parameter-cell markers; add Silver runner output-batch validation.
+- [x] Run `nb_gold_run_legacy` in Fabric; the user confirmed successful execution on 2026-11-12.
+- [ ] Archive the successful Gold batch ID, counts, and output totals and compare with the documented local baseline; the success report did not include these outputs.
 - [ ] Compare legacy Gold with actual SliceDW/externally provided validation exports; do not claim a deployed SQL Server match from local tests alone.
 - [ ] Obtain user feedback/confirmation before starting corrected Gold; implementation stops at milestone 1.
 - [ ] Build corrected Gold outputs with explicit, documented treatments for the known legacy defects, including tax-inclusive Aloha sales, royalty holiday duration, and store 1078's opening date.

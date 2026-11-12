@@ -18,13 +18,15 @@ Create typed, standardized Delta tables in `silver`. Handle each source's date, 
 
 **Carry-forward notes:** the matching assertions require 1,637 unique MICROS links, 630 unique Aloha links, and one retained ambiguous Aloha match. The ambiguity remains an explicit Gold/reconciliation task, not a notebook failure. Archive the successful run's count/quality output and run identifier for the dossier; these were not included in the user's status report.
 
-## 3. Gold — legacy milestone implemented; Fabric verification pending
+## 3. Gold — legacy milestone successfully executed in Fabric
 
 First reproduce SliceDW's existing business rules and numbers as closely as possible from the legacy SQL and SSIS artifacts. Only after establishing that baseline, implement corrected marts and identify each rule that changes a result.
 
 **Milestone 1:** the user approved reference inputs and legacy reproduction only on 2026-11-11. `nb_gold_reference_data`, `nb_gold_legacy`, and `nb_gold_run_legacy` implement that scope. Local Spark execution compares every keyed report metric with an independent source-based Decimal baseline, including all 190 food-cost rows, and verifies reruns and batch consistency. Contracts, run instructions, and locally calculated totals are in [`../gold-legacy.md`](../gold-legacy.md).
 
-**Next action:** sync `NG/Dev`, run `nb_gold_run_legacy` in Fabric after a successful Silver batch, and capture the results. Fabric Delta writes/orchestration and deployed SliceDW/external validation comparisons remain pending. Stop for user feedback/confirmation before corrected Gold.
+**Current status:** on 2026-11-12, the user confirmed `nb_gold_run_legacy` ran successfully after resolving an incorrect lakehouse attachment and fixing native parameter-cell serialization. This confirms user-reported Fabric execution, not an independently inspected comparison of live outputs to the local baseline.
+
+**Next action:** archive the successful batch ID, counts, and totals and compare them with the documented baseline. Deployed SliceDW/external validation comparisons remain pending. Obtain user feedback/confirmation before starting milestone 2: corrected Gold outputs with explicit treatments of legacy defects. No corrected Gold implementation has started.
 
 **Gate:** legacy reproduction is compared to SliceDW; corrected outputs document their differences and reconcile to Silver/source totals.
 
