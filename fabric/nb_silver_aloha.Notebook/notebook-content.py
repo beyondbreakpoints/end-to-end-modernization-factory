@@ -10,6 +10,7 @@
 # META     "lakehouse": {
 # META       "default_lakehouse": "f8d5782d-d817-44fe-a071-613af0122930",
 # META       "default_lakehouse_name": "lh_polarslice",
+# META       "default_lakehouse_workspace_id": "",
 # META       "known_lakehouses": [
 # META         {
 # META           "id": "f8d5782d-d817-44fe-a071-613af0122930",
@@ -33,10 +34,7 @@ batch_id = ""
 
 # META {
 # META   "language": "python",
-# META   "language_group": "synapse_pyspark",
-# META   "tags": [
-# META     "parameters"
-# META   ]
+# META   "language_group": "synapse_pyspark"
 # META }
 
 # CELL ********************
