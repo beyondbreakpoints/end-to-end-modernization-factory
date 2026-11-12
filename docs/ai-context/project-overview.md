@@ -23,15 +23,15 @@ The intended work order is:
 ## Repository and runtime
 
 - `data/` contains the source pack (excluding the answer key), legacy SliceDW materials, and generator/pack documentation.
-- `fabric/` contains Fabric workspace items: `lh_polarslice` and the Bronze notebooks.
+- `fabric/` contains Fabric workspace items: `lh_polarslice` and the Bronze, Silver, legacy Gold, and corrected Gold notebooks.
 - `docs/onelake-upload.md` documents loading source files to OneLake.
 - `sql/` is reserved for the Azure SQL deployment and related dossier work.
 - Fabric Git is configured to synchronize `/fabric` from branch `NG/Dev`. Git synchronization moves Fabric items, not the source data files; the user uploads the source folders separately to the lakehouse.
-- Lakehouse `lh_polarslice` is schema-enabled. Bronze tables live in `bronze`; Silver and Gold are planned in their own schemas.
+- Lakehouse `lh_polarslice` is schema-enabled. Tables live in `bronze`, `silver`, and `gold`.
 
 ## Current state
 
-Bronze was successfully run by the user in Fabric, and on 2026-11-11 the user reported all Silver notebooks `Succeeded`. Gold milestone 1 (reference inputs and legacy reproduction) is now implemented on `NG/Dev` and locally validated; its Fabric run and external baseline comparison remain pending. Corrected Gold, reconciliation, Azure SQL, and dossier phases remain ahead. The user requested feedback/confirmation before continuing beyond Gold milestone 1. Treat workspace execution status as user-reported, not independently inspected.
+Bronze and Silver were successfully run by the user in Fabric. On 2026-11-12 the user confirmed Gold milestone 1 succeeded and supplied counts, daily totals, invoices, and cheese rows matching the independent local baseline; the evidence is archived in `docs/gold-legacy.md`. The user then approved corrected Gold and its per-comp Aloha rounding policy. Milestone 2 is implemented on `NG/Dev` with exact local comparisons; its Fabric run is pending (see `docs/gold-corrected.md`). Stop for feedback after that run before comparison/bridge work. External reconciliation, Azure SQL, and the dossier remain ahead. Treat workspace execution status as user-reported, not independently inspected.
 
 ## Success criteria
 

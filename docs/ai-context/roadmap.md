@@ -18,7 +18,7 @@ Create typed, standardized Delta tables in `silver`. Handle each source's date, 
 
 **Carry-forward notes:** the matching assertions require 1,637 unique MICROS links, 630 unique Aloha links, and one retained ambiguous Aloha match. The ambiguity remains an explicit Gold/reconciliation task, not a notebook failure. Archive the successful run's count/quality output and run identifier for the dossier; these were not included in the user's status report.
 
-## 3. Gold — legacy milestone successfully executed in Fabric
+## 3. Gold — legacy verified; corrected milestone implemented
 
 First reproduce SliceDW's existing business rules and numbers as closely as possible from the legacy SQL and SSIS artifacts. Only after establishing that baseline, implement corrected marts and identify each rule that changes a result.
 
@@ -28,7 +28,9 @@ First reproduce SliceDW's existing business rules and numbers as closely as poss
 
 **Evidence review:** the user supplied Gold batch `07e7a5f4-2a8a-4884-9b80-58fb1c76c640`, all 18 output counts, five daily totals, nine invoices, and ten cheese-variance rows. These match the documented counts and independently calculated financial/quantity baseline exactly; the supplied results are archived in [`../gold-legacy.md`](../gold-legacy.md). Net sales are 299,572.90 and invoice amount due is 21,061.48. This is not a full live row-by-row reconciliation of every report.
 
-**Next action:** obtain user feedback/confirmation before starting milestone 2: corrected Gold outputs with explicit treatments of legacy defects. No corrected Gold implementation has started. Full input lineage and remaining live report evidence still need archiving for the dossier; deployed SliceDW/external validation comparisons remain pending.
+**Milestone 2:** approved by the user on 2026-11-12 and implemented in `nb_gold_corrected` and `nb_gold_run_corrected`. Corrected POS-led marts remove gift/void/duplicate sales, use Aloha DOB and tax-exclusive values, retain app links only for attribution, apply the contractual holiday and single credit, and use signed base-unit receipts and corrected SKU recipes. The user approved per-comp cent rounding, with Aloha gross derived from net plus discounts. Local comparisons match the independent raw-source Decimal baseline exactly: net sales 268,893.08, invoices 17,251.74, food variance cost 4,097.42. See [`../gold-corrected.md`](../gold-corrected.md).
+
+**Next action:** sync and run `nb_gold_run_corrected` in Fabric, archive its output, and compare with the local baseline. Stop for user feedback/confirmation before implementing the legacy-to-corrected comparison/bridge. Full input lineage and remaining legacy live report evidence still need archiving for the dossier; deployed SliceDW/external validation comparisons remain pending.
 
 **Gate:** legacy reproduction is compared to SliceDW; corrected outputs document their differences and reconcile to Silver/source totals.
 

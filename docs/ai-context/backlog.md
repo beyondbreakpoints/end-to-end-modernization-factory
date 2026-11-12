@@ -43,10 +43,12 @@ Verified Bronze row counts from that run:
 - [x] Archive the supplied Gold batch ID, all 18 output counts, five daily totals, nine invoices, and ten cheese-variance rows in `docs/gold-legacy.md`. User-supplied batch `07e7a5f4-2a8a-4884-9b80-58fb1c76c640` matches the local contracts and compared financial/quantity values exactly.
 - [ ] Archive the successful Silver ID and full Gold input manifest and remaining report outputs for dossier-level lineage and live row-by-row evidence; the supplied console extract does not cover these.
 - [ ] Compare legacy Gold with actual SliceDW/externally provided validation exports; do not claim a deployed SQL Server match from local tests alone.
-- [ ] Obtain user feedback/confirmation before starting corrected Gold; implementation stops at milestone 1.
-- [ ] Build corrected Gold outputs with explicit, documented treatments for the known legacy defects, including tax-inclusive Aloha sales, royalty holiday duration, and store 1078's opening date.
+- [x] Obtain user approval to start corrected Gold on 2026-11-12; user also approved per-comp pre-tax rounding and deriving Aloha gross from net plus discounts.
+- [x] Implement `nb_gold_corrected` and `nb_gold_run_corrected`, preserving legacy/reference outputs. Document rules and exact local source-based comparisons in `docs/gold-corrected.md`, including the six-month holiday with 1078's unchanged authoritative opening date.
+- [ ] Run corrected Gold in Fabric, archive its batch/count/financial output, and compare with the local baseline.
+- [ ] Obtain user feedback/confirmation after corrected Gold before starting comparison/bridge outputs.
 - [ ] Reconcile legacy and corrected outputs to source totals and the offline answer key. Do not copy answer-key material into Git or production artifacts.
-- [ ] Resolve or explicitly document the flagged ambiguous Aloha order match without inventing a link or counting online sales twice.
+- [x] Explicitly retain the ambiguous Aloha app order without a definitive link or incremental revenue in corrected attribution; POS remains the sales system of record. External reconciliation remains pending.
 
 ## Azure SQL, dossier, and delivery
 

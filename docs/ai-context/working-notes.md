@@ -43,7 +43,16 @@ The previous conversation mentioned “item 3” and later asked for step-by-ste
 - `nb_gold_run_legacy` invokes `nb_gold_reference_data` and `nb_gold_legacy` after Silver. No extra uploads are needed; embedded references are versioned snapshots of SliceDW's `03_reference_data.sql`.
 - Legacy defects are preserved intentionally. Local independent source-based comparisons match every report metric, including 190 food-cost rows with no rounding tolerance. Period legacy net sales are $299,572.90 and invoice amount due is $21,061.48; these are incorrect business results retained as the migration baseline.
 - Local tests use Parquet writes in place of Fabric Delta writes. On 2026-11-12 the user confirmed `nb_gold_run_legacy` ran successfully in Fabric after fixing the lakehouse attachment and parameter propagation. They supplied Gold batch `07e7a5f4-2a8a-4884-9b80-58fb1c76c640`, all 18 table counts, five daily totals, nine invoices, and ten cheese rows; these match the local contracts and independently calculated financial/quantity values exactly and are archived in `docs/gold-legacy.md`. Full input-manifest contents, the successful Silver ID, remaining live report values, and external SliceDW comparisons remain pending. The earlier failed Silver runner ID is not evidence of the final successful run.
-- Do not proceed to corrected Gold before user feedback/confirmation. The one ambiguous Silver Aloha match remains a corrected/reconciliation task.
+- User approved starting corrected Gold after this evidence review on 2026-11-12. The one ambiguous Silver Aloha match must not be forced into a definitive link.
+
+## Gold milestone 2 handoff
+
+- Implemented `nb_gold_corrected` and `nb_gold_run_corrected` with native parameter cells, separate `gold.corrected_*` tables, and no legacy/reference writes. User approved rounding each Aloha comp to pre-tax cents and deriving gross as net plus discounts.
+- Local independent raw-source Decimal comparisons match all corrected report values. Totals: net sales 268,893.08; invoices 17,251.74; promo 20,219.10; all-ingredient food variance cost 4,097.42. These are local results, not yet live Fabric results.
+- The corrected runner consumes the existing successful Silver and reference snapshots; do not rerun Bronze/Silver/reference inputs unnecessarily. Verify its actual default lakehouse item after sync, then run `nb_gold_run_corrected` and archive the batch ID, counts, daily totals, invoices, cheese rows, and attribution statuses.
+- Store 1078 keeps source open date 2025-12-01 and is excluded by the six-month holiday. The second 1055 credit remains as an excluded decision record. The ambiguous Aloha order remains unattributed, with zero incremental sales.
+- Complete opening and closing counts are required; shorter periods lacking those snapshots fail before publication. Multi-table corrected publication is not atomic; consume only after the full runner succeeds.
+- Pause for user feedback/confirmation after the Fabric run before implementing comparison/bridge outputs. Full external reconciliation, Azure SQL, and the dossier have not started.
 
 ## Provenance
 

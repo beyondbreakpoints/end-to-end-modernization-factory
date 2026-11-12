@@ -61,7 +61,8 @@ class SilverRunnerTests(unittest.TestCase):
     def test_silver_and_gold_parameters_use_native_fabric_cells(self):
         names = ["nb_silver_master_data", "nb_silver_micros", "nb_silver_aloha",
                  "nb_silver_as400_commissary", "nb_silver_online_app",
-                 "nb_gold_reference_data", "nb_gold_legacy", "nb_gold_run_legacy"]
+                 "nb_gold_reference_data", "nb_gold_legacy", "nb_gold_run_legacy",
+                 "nb_gold_corrected", "nb_gold_run_corrected"]
         for name in names:
             with self.subTest(notebook=name):
                 cells = notebook_cells(name)

@@ -1,4 +1,5 @@
 import ast
+from calendar import monthrange
 from collections import defaultdict
 import csv
 from datetime import date, datetime
@@ -167,6 +168,135 @@ def source_baseline():
                 facts=facts, lines=lines, online=online)
 
 
+def corrected_source_baseline():
+    """Corrected results from raw exports, independent of notebook/Silver calculations."""
+    r2 = lambda x: x.quantize(D("0.01"), rounding=ROUND_HALF_UP)
+    mh = [r for p in sorted((SOURCE / "micros").glob("check_header_*.txt")) for r in csv_rows(p, "|")]
+    md = [r for p in sorted((SOURCE / "micros").glob("check_detail_*.txt")) for r in csv_rows(p, "|")]
+    ac = [r for p in sorted((SOURCE / "aloha").glob("*/*/CHECKS.csv")) for r in csv_rows(p)]
+    ai = [r for p in sorted((SOURCE / "aloha").glob("*/*/ITEMS.csv")) for r in csv_rows(p)]
+    menu = {r["micros_item_no"]: r["sku"] for r in csv_rows(SOURCE / "master_data" / "menu.csv")}
+    code_map = {
+        "SMPEP": "PZ-PEP-S", "MDPEP": "PZ-PEP-M", "LGPEP": "PZ-PEP-L",
+        "MDMARG": "PZ-MAR-M", "LGMARG": "PZ-MAR-L", "MDHAW": "PZ-HAW-M", "LGHAW": "PZ-HAW-L",
+        "MDVEG": "PZ-VEG-M", "LGVEG": "PZ-VEG-L", "MDMEAT": "PZ-MTL-M", "LGMEAT": "PZ-MTL-L",
+        "LGBBQ": "PZ-BBQ-L", "GARBRD": "SD-GARLIC", "WING10": "SD-WING10", "CAESAR": "SD-CAESAR",
+        "DIPGAR": "SD-DIP", "CINN": "DS-CINN", "POP2L": "BV-POP2L", "POPCAN": "BV-POPCAN",
+    }
+    key = lambda r: (int(r["store"]), date.fromisoformat(r["business_date"]), r["check_no"])
+    akey = lambda r: (int(r["STORE"]), datetime.strptime(r["DOB"], "%Y%m%d").date(), r["CHECKID"])
+    voided = {key(r) for r in mh if r["void_flag"] == "V"}
+    headers = {key(r): r for r in mh if r["void_flag"] == "N" and r["order_type"] != "GIFT"
+               and key(r) not in voided}
+    micros_lines = {(*key(r), r["line_no"], r["line_type"]): r for r in md
+                    if key(r) in headers and r["line_type"] in ("ITEM", "DISC")}
+    promos = defaultdict(lambda: D(0))
+    comp_by_check = defaultdict(lambda: D(0))
+    for r in micros_lines.values():
+        if r["line_type"] == "DISC":
+            st, day, _ = key(r)
+            name = {"9001": "2FOR1TUE", "9002": "WELCOME10", "9003": "STAFF50"}[r["item_no"]]
+            promos[(st, day, name)] -= D(r["line_amount"])
+    for r in ai:
+        if r["TYPE"] == "COMP":
+            st, day, _ = akey(r)
+            discount = r2(-D(r["AMOUNT"]) / D("1.13"))
+            comp_by_check[akey(r)] += discount
+            promos[(st, day, {"2F1TUE": "2FOR1TUE", "EMP50": "STAFF50"}[r["ITEMCODE"]])] += discount
+    facts = {}
+    for k, r in headers.items():
+        st, day, check = k
+        gross, discount = D(r["subtotal"]), D(r["discount"])
+        facts[("MICROS", f"{st}|{day:%Y%m%d}|{check}")] = dict(
+            store_id=st, business_date=day, gross=gross, discount=discount, net_sales=gross-discount,
+            tax=D(r["tax"]), tip=D(r["tip"]), total=D(r["total"]),
+            is_online=r["tender"] == "WEB", tender=r["tender"])
+    for r in ac:
+        st, day, check = akey(r)
+        net, discount = D(r["NETTOTAL"]) - D(r["TAXINCL"]), comp_by_check[akey(r)]
+        facts[("ALOHA", f"{st}|{day:%Y%m%d}|{check}")] = dict(
+            store_id=st, business_date=day, gross=net+discount, discount=discount, net_sales=net,
+            tax=D(r["TAXINCL"]), tip=D(r["TIP"]), total=D(r["TOTAL"]),
+            is_online=r["PAYTYPE"] == "WEB", tender=r["PAYTYPE"])
+    daily = {}
+    for st, day in {(v["store_id"], v["business_date"]) for v in facts.values()}:
+        rows = [v for v in facts.values() if (v["store_id"], v["business_date"]) == (st, day)]
+        amount = lambda c: sum((v[c] for v in rows), D(0))
+        daily[(st, day)] = dict(gross_sales=amount("gross"), discounts=amount("discount"),
+            net_sales=amount("net_sales"), tax=amount("tax"), tips=amount("tip"), check_count=len(rows),
+            online_pos_net_sales=sum((v["net_sales"] for v in rows if v["is_online"]), D(0)),
+            tender_list=",".join(sorted({v["tender"] for v in rows})))
+    sold = defaultdict(lambda: D(0))
+    lines = {}
+    for r in micros_lines.values():
+        if r["line_type"] == "ITEM":
+            st, day, check = key(r)
+            sku, qty = menu[r["item_no"]], int(r["qty"])
+            lines[("MICROS", f"{st}|{day:%Y%m%d}|{check}", int(r["line_no"]))] = dict(sku=sku, qty=qty)
+            sold[(st, sku)] += qty
+    for r in ai:
+        if r["TYPE"] == "ITEM":
+            st, day, check = akey(r)
+            sku, qty = code_map[r["ITEMCODE"]], int(r["QTY"])
+            lines[("ALOHA", f"{st}|{day:%Y%m%d}|{check}", int(r["ENTRYID"]))] = dict(sku=sku, qty=qty)
+            sold[(st, sku)] += qty
+    adj = {}
+    for r in csv_rows(LEGACY / "ManualAdjustments_March2026.csv"):
+        adj.setdefault((int(r["Store"]), r["Date"], r["Type"], r["Amount"], r["Note"]), D(r["Amount"]))
+    terms = {r[0]: D(str(r[1])) for r in sql_reference("cfg.RoyaltyTerm")}
+    royalty = {}
+    for s in csv_rows(SOURCE / "master_data" / "stores.csv"):
+        opened = date.fromisoformat(s["open_date"])
+        year, month = divmod(opened.year*12+opened.month-1+int(terms["NEW_STORE_HOLIDAY_MONTHS"]), 12)
+        eligible = date(year, month+1, min(opened.day, monthrange(year, month+1)[1]))
+        if s["ownership"] != "FRANCHISE" or eligible > END:
+            continue
+        st = int(s["store_id"])
+        net = sum((v["net_sales"] for (store, _), v in daily.items() if store == st), D(0))
+        adjustment = sum((v for k, v in adj.items() if k[0] == st and START.isoformat() <= k[1] <= END.isoformat()), D(0))
+        roy, ad = r2(net*terms["ROYALTY_RATE"]), r2(net*terms["AD_FUND_RATE"])
+        royalty[(st, START, END)] = dict(franchisee_id=s["franchisee_id"], franchisee_name=s["franchisee_name"],
+            net_sales=net, royalty=roy, ad_fund=ad, adjustments=adjustment, amount_due=roy+ad+adjustment)
+    item = {}
+    for raw in (SOURCE / "as400_commissary" / "ITEMMAST.TXT").read_text().splitlines():
+        item[raw[:8]] = (D(raw[32:39])/1000, D(raw[39:46])/100, raw[30:32].strip())
+    received = defaultdict(lambda: D(0))
+    for path in (SOURCE / "as400_commissary").glob("SHP*.TXT"):
+        for raw in path.read_text().splitlines():
+            qty, code = D(raw[40:47])/100, raw[12:20]
+            if raw[47:49] == "CS":
+                qty *= item[code][0]
+            received[(int(raw[:5]), code)] += -qty if raw[-1] == "-" else qty
+    theoretical = defaultdict(lambda: D(0))
+    for r in csv_rows(SOURCE / "master_data" / "recipes.csv"):
+        for (st, sku), qty in sold.items():
+            if sku == r["sku"]:
+                theoretical[(st, r["ingredient_item_code"])] += qty * D(r["qty_per_unit"])
+    counts = {}
+    for path in (SOURCE / "as400_commissary").glob("CNT*.TXT"):
+        for raw in path.read_text().splitlines():
+            counts[(int(raw[:5]), raw[13:21], raw[12])] = D(raw[21:29])/1000
+    food = {}
+    for (st, code, kind), opening in counts.items():
+        if kind != "O":
+            continue
+        rec, closing, theo = received[(st, code)], counts[(st, code, "C")], theoretical[(st, code)]
+        actual = opening+rec-closing
+        var = actual-theo
+        food[(st, START, END, code)] = dict(base_uom=item[code][2], opening_qty=opening, received_qty=rec,
+            closing_qty=closing, actual_usage=actual, theoretical_usage=theo, variance=var,
+            variance_pct=(var/theo*100).quantize(D("0.1"), rounding=ROUND_HALF_UP) if theo else None,
+            variance_cost=r2(var*item[code][1]/item[code][0]))
+    org = {r[0]: r for r in sql_reference("cfg.OrgUnit")}
+    region = defaultdict(lambda: D(0))
+    for (st, day), values in daily.items():
+        unit = st
+        while unit is not None:
+            region[(unit, day)] += values["net_sales"]
+            unit = org[unit][1]
+    return dict(facts=facts, lines=lines, daily=daily, promo=promos, royalty=royalty, food=food, region=region)
+
+
 class GoldLegacyTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -231,6 +361,8 @@ class GoldLegacyTests(unittest.TestCase):
         cls.execute_gold("nb_gold_reference_data")
         cls.execute_gold("nb_gold_legacy")
         cls.baseline = source_baseline()
+        cls.execute_gold("nb_gold_corrected", {"batch_id": "corrected-fixture"})
+        cls.corrected_baseline = corrected_source_baseline()
 
     @staticmethod
     def meta(df):
@@ -353,6 +485,77 @@ class GoldLegacyTests(unittest.TestCase):
                 self.execute_gold("nb_gold_legacy")
         finally:
             self.tables["silver.menu"] = original
+
+    def test_corrected_reports_match_independent_source_baseline(self):
+        b = self.corrected_baseline
+        self.assert_report("corrected_fact_checks", ("source_system", "check_key"), b["facts"])
+        self.assert_report("corrected_fact_check_lines", ("source_system", "check_key", "line_no"), b["lines"])
+        self.assert_report("corrected_daily_sales", ("store_id", "business_date"), b["daily"])
+        self.assert_report("corrected_promo_cost", ("store_id", "business_date", "promo_name"),
+                           {k: {"discount_amount": v} for k, v in b["promo"].items()})
+        self.assert_report("corrected_royalty_invoices", ("store_id", "period_start", "period_end"), b["royalty"])
+        self.assert_report("corrected_food_cost_variance", ("store_id", "period_start", "period_end", "item_code"), b["food"])
+        self.assert_report("corrected_region_daily_sales", ("unit_id", "business_date"),
+                           {k: {"net_sales": v} for k, v in b["region"].items()})
+        franchisees = {}
+        for (_, ps, pe), r in b["royalty"].items():
+            k = (r["franchisee_id"], ps, pe)
+            row = franchisees.setdefault(k, dict(stores=0, **{
+                c: D(0) for c in ("net_sales", "royalty", "ad_fund", "adjustments", "amount_due")}))
+            row["stores"] += 1
+            for c in ("net_sales", "royalty", "ad_fund", "adjustments", "amount_due"):
+                row[c] += r[c]
+        self.assert_report("corrected_franchisee_invoices", ("franchisee_id", "period_start", "period_end"), franchisees)
+        invoices = self.spark.table("gold.corrected_royalty_invoices")
+        self.assertEqual(invoices.filter("store_id = 1078").count(), 0)
+        self.assertEqual(invoices.filter("store_id = 1055").first().adjustments, D("-120"))
+        decisions = self.spark.table("gold.corrected_adjustment_decisions")
+        self.assertEqual({r.adjustment_id: r.is_included for r in decisions.collect()},
+                         {1: True, 2: True, 3: True, 4: False, 5: True})
+        attribution = self.spark.table("gold.corrected_online_attribution")
+        statuses = {r.attribution_status: r["count"] for r in attribution.groupBy("attribution_status").count().collect()}
+        self.assertEqual(statuses, {"CANCELLED": 34, "MATCHED_MICROS": 1637, "MATCHED_ALOHA": 630,
+                                    "AMBIGUOUS_ALOHA": 1})
+        self.assertEqual(attribution.filter("incremental_net_sales <> 0").count(), 0)
+        ambiguous = attribution.filter("attribution_status = 'AMBIGUOUS_ALOHA'").first()
+        self.assertIsNone(ambiguous.attributed_check_key)
+        self.assertIsNone(ambiguous.attributed_net_sales)
+        cancelled = attribution.filter("attribution_status = 'CANCELLED'")
+        self.assertEqual(cancelled.filter("attributed_check_key IS NOT NULL").count(), 0)
+
+    def test_corrected_rerun_preserves_legacy_references_and_own_results(self):
+        preserved = {t: self.spark.table(f"gold.{t}").collect() for t in
+                     ("legacy_daily_sales", "legacy_royalty_invoices", "legacy_run_inputs",
+                      "reference_manual_adjustments", "reference_royalty_terms")}
+        outputs = [r.tableName for r in self.spark.sql("SHOW TABLES IN gold").collect()
+                   if r.tableName.startswith("corrected_")]
+        before = {t: sorted(self.spark.table(f"gold.{t}").collect(), key=repr) for t in outputs}
+        self.execute_gold("nb_gold_corrected", {"batch_id": "corrected-fixture"})
+        for table, rows in before.items():
+            self.assertEqual(rows, sorted(self.spark.table(f"gold.{table}").collect(), key=repr), table)
+        for table, rows in preserved.items():
+            self.assertEqual(rows, self.spark.table(f"gold.{table}").collect(), table)
+
+    def test_corrected_preflight_rejects_mixed_batches_conflicts_and_missing_counts(self):
+        cases = [
+            ("silver.menu", lambda df: df.withColumn("_silver_batch_id", F.lit("other")),
+             "Mixed silver"),
+            ("silver.micros_checks", lambda df: df.unionByName(
+                df.limit(1).withColumn("subtotal", F.col("subtotal")+1)), "conflicting versions"),
+            ("silver.as400_stock_counts", lambda df: df.filter("NOT (store_id = 1042 AND count_type = 'O')"),
+             "Missing O stock counts"),
+        ]
+        for table, alter, message in cases:
+            original = self.tables[table]
+            with self.subTest(table=table):
+                try:
+                    self.tables[table] = alter(original)
+                    with self.assertRaisesRegex(AssertionError, message):
+                        self.execute_gold("nb_gold_corrected")
+                finally:
+                    self.tables[table] = original
+        with self.assertRaisesRegex(AssertionError, "Missing O stock counts"):
+            self.execute_gold("nb_gold_corrected", {"period_start": "2026-03-10"})
 
 
 if __name__ == "__main__":

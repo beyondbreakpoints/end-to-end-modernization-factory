@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_gold_corrected",
+    "description": "Corrected POS-led sales, royalties and food-cost marts"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ebbc224e-6643-4380-b68a-d8a445fca653"
+  }
+}
