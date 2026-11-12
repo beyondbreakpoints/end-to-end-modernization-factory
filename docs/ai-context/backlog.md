@@ -59,8 +59,8 @@ Verified Bronze row counts from that run:
 
 - [x] Implement Azure SQL deployment scripts in `sql/` (2026-11-12): `01_schema.sql` (11 corrected Gold mart tables), `02_load_procedures.sql` (staging tables + `gold.usp_LoadCorrectedGold`), `03_validation.sql` (row counts, financial totals, balance and holiday checks), `sql/README.md` (deployment instructions).
 - [x] Prepare the final dossier (`docs/dossier.md`) covering architecture, source lineage (batch IDs), Bronze/Silver counts, legacy defects, corrected results, bridge waterfall, reconciliation summary, Azure SQL deployment, and operational instructions (2026-11-12).
-- [ ] Review all changes for secrets and answer-key content; update the root README and verify `main` contains the required Fabric items.
-- [ ] Open the final PR from `NG/Dev` to `main` after all phases are complete.
+- [x] Review all changes for secrets and answer-key content (2026-11-12): `.gitignore` blocks `3_answer_key/`; generator scripts reference it as output path only; no credentials or sensitive content in diff. Root README updated to reflect completed state.
+- [ ] Open the final PR from `NG/Dev` to `main` — pending.
 
 ## Operational follow-up
 
