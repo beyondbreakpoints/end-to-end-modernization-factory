@@ -1,0 +1,178 @@
+{
+  "properties": {
+    "description": "Orchestrates the Polar Slice medallion run: Bronze -> Silver -> Gold legacy -> Gold corrected -> Gold comparison -> Gold reconcile.",
+    "activities": [
+      {
+        "name": "Bronze - run all",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "c1d3a69d-c1a2-4689-b11f-68a9c8c1402e",
+          "workspaceId": "da1f0187-3dda-4161-8865-ad46eb27457b"
+        }
+      },
+      {
+        "name": "Silver - run all",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Bronze - run all",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "b8faa5ce-1737-42f2-8f98-74536f4f1e1b",
+          "workspaceId": "da1f0187-3dda-4161-8865-ad46eb27457b"
+        }
+      },
+      {
+        "name": "Gold - run legacy",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Silver - run all",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "616e79e7-8010-4620-ba90-d9b3b9452ed5",
+          "workspaceId": "da1f0187-3dda-4161-8865-ad46eb27457b",
+          "parameters": {
+            "period_start": {
+              "value": "2026-03-09",
+              "type": "string"
+            },
+            "period_end": {
+              "value": "2026-03-13",
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "Gold - run corrected",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Gold - run legacy",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "ebdee3c9-f540-4f12-a803-bc83e2b4f965",
+          "workspaceId": "da1f0187-3dda-4161-8865-ad46eb27457b",
+          "parameters": {
+            "period_start": {
+              "value": "2026-03-09",
+              "type": "string"
+            },
+            "period_end": {
+              "value": "2026-03-13",
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "Gold - run comparison",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Gold - run corrected",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "795aa02b-3f1f-452b-898f-0afb772d5943",
+          "workspaceId": "da1f0187-3dda-4161-8865-ad46eb27457b",
+          "parameters": {
+            "period_start": {
+              "value": "2026-03-09",
+              "type": "string"
+            },
+            "period_end": {
+              "value": "2026-03-13",
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "Gold - run reconcile",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Gold - run comparison",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "ef8cdef4-26a4-425e-b08e-27607e994c1f",
+          "workspaceId": "da1f0187-3dda-4161-8865-ad46eb27457b",
+          "parameters": {
+            "period_start": {
+              "value": "2026-03-09",
+              "type": "string"
+            },
+            "period_end": {
+              "value": "2026-03-13",
+              "type": "string"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
