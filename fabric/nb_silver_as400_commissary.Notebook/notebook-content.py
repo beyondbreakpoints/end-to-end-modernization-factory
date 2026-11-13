@@ -10,7 +10,7 @@
 # META     "lakehouse": {
 # META       "default_lakehouse": "767bc30b-8fb4-4c88-9725-7632324e8d58",
 # META       "default_lakehouse_name": "lh_polarslice",
-# META       "default_lakehouse_workspace_id": "",
+# META       "default_lakehouse_workspace_id": "da1f0187-3dda-4161-8865-ad46eb27457b",
 # META       "known_lakehouses": [
 # META         {
 # META           "id": "767bc30b-8fb4-4c88-9725-7632324e8d58",
