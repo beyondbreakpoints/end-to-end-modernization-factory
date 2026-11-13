@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_polarslice_orchestration",
+    "description": "Orchestrates Bronze, Silver, and all Gold milestone notebooks end to end"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "504e7611-11af-bed2-4578-640764769187"
+  }
+}
